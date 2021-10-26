@@ -7,5 +7,5 @@ Run:<br>
 ## Run on Docker
 Build the docker image<br>
 ```docker build -t asset-app .```<br>
-start the docker image<br>
+Start the docker image<br>
 ```docker run -itp 5000:5000 asset-app```<br>
