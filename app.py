@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json, request
-
+from dotenv import load_dotenv
+load_dotenv() # load env variables from environment or the .env file
 # from flask_mysqldb import MySQL
 
 # mysql = MySQL()
