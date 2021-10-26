@@ -1,8 +1,10 @@
 from flask import Flask, render_template, json, request
-from flask.ext.mysql import MySQL
 
-mysql = MySQL()
+# from flask_mysqldb import MySQL
+
+# mysql = MySQL()
 app = Flask(__name__)
+
 
 ## MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = 'jay'
@@ -14,8 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    return render_template('templates/index.html')
-
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
