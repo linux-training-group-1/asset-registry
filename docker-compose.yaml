@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  asset-app:
+    image: asset-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    links:
+      - redis
+      - mysql
+  redis:
+    image: redis:6-alpine3.14
+#    volumes:
+#      - ../resources/adapter/security:/home/wso2/security
+#    environment:
+#      - ADAPTER_PRIVATE_KEY_PATH=/home/wso2/security/keystore/mg.key
+    ports:
+      - "6379:6379"
+  mysql:
+    image: mysql:5.6
+#    volumes:
+#      - ../resources/enforcer/security:/home/wso2/security
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3306:3306"
