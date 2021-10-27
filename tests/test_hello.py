@@ -3,4 +3,4 @@ def test_hello():
 
 
 def test_hi():
-    assert True
+    assert 2 + 2 == 4
