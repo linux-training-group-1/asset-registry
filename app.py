@@ -1,6 +1,7 @@
 from flask import Flask, render_template, json, request
 from dotenv import load_dotenv
-load_dotenv() # load env variables from environment or the .env file
+
+load_dotenv()  # load env variables from environment or the .env file
 # from flask_mysqldb import MySQL
 
 # mysql = MySQL()
@@ -17,7 +18,33 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
+    # landing page
     return render_template('index.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    return ''
+
+
+@app.route('/asset', methods=['POST'])
+def add_new_asset():
+    return ''
+
+
+@app.route('/asset', methods=['GET'])
+def search_asset():
+    return ''
+
+
+@app.route('/report', methods=['GET'])
+def gen_report():
+    return ''
+
+
+@app.route('/health', methods=['GET'])
+def health():
+    return ''
 
 
 if __name__ == "__main__":
