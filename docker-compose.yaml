@@ -22,12 +22,17 @@ services:
       - "6379:6379"
   mysql:
     image: mysql:5.6
-#    volumes:
-#      - ../resources/enforcer/security:/home/wso2/security
+    volumes:
+      - type: volume
+        source: mysql-per-volume
+        target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER
     ports:
       - "3306:3306"
+volumes:
+  mysql-per-volume:
 
 
 #todo add volumes and env variables
