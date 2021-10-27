@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appdeploy
+  labels:
+    app: asset-app
+spec:
+  selector:
+    matchLabels:
+      app: asset-app
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: asset-app
+    spec:
+      containers:
+        - name: appdeploy
+          image: appdocker
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/data/certs"
+              name: ca-certs
+              readOnly: true
+      volumes:
+        - name: ca-certs
+          secret:
+            secretName: <username>-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appdeploy
+  labels:
+    app: asset-app
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      name: flask
+  selector:
+    app: asset-app
+  type: LoadBalancer
