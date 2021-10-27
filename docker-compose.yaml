@@ -28,3 +28,6 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     ports:
       - "3306:3306"
+
+
+#todo add volumes and env variables
