@@ -8,10 +8,12 @@ def test_hi():
 
 import time
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def test_integration_using_selenium():
-    driver = webdriver.Chrome()
+
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get('https://www.google.com/')
     print(driver.title)
     time.sleep(5)
