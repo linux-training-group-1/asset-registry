@@ -1,5 +1,5 @@
 # Asset Registry
-[![ci-cd-pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
+[![CI/CD pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
 ## Test the app
 Install dependencies:<br>
 ```pip install -r requirements.txt -r requirements-dev.txt```<br>
