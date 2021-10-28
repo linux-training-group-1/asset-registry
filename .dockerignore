@@ -5,7 +5,7 @@ chromedriver
 k8s-artifacts
 
 
-#form boilerplate
+#from boilerplate
 .git
 Dockerfile
 .DS_Store
