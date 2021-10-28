@@ -1,5 +1,8 @@
 FROM python:3.8-alpine3.14
 
+RUN addgroup -S assetuser && adduser -S -G assetuser assetuser
+USER assetuser
+
 WORKDIR /app
 COPY . /app
 
