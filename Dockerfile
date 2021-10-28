@@ -11,6 +11,6 @@ RUN addgroup -S assetuser && adduser -S -G assetuser assetuser
 USER assetuser
 
 EXPOSE $PORT
-CMD ["gunicorn", "app:app","-b",":$PORT"]
+CMD ["gunicorn", "app:app","-b",":5000"]
 
 HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost:$PORT/ || exit 1
