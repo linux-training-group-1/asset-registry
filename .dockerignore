@@ -1,3 +1,5 @@
 .pytest_cache
 .idea
 docker-compose.yaml
+chromedriver
+k8s-artifacts
