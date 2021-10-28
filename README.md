@@ -12,7 +12,7 @@ Install requirements:<br>
 Start the application:<br>
 ```gunicorn --bind 0.0.0.0:5000 app:app```<br>
 
-## Run on the app on Docker
+## Run the app on Docker
 Build the docker image<br>
 ```docker build -t asset-app .```<br>
 Start the docker image<br>
