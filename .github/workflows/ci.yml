@@ -28,13 +28,13 @@ jobs:
           pip3 install -r requirements.txt -r requirements-dev.txt
       - name: Setup Chrome webdriver
         uses: nanasess/setup-chromedriver@master
-      - name: Setup Chrome
+      - name: Setup Chrome Display
         run: |
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       - name: Test with pytest
         run: |
           pytest --verbose --failed-first
-          ls
+          ls -la
         env:
          DISPLAY: :99
       - name: Set up QEMU
