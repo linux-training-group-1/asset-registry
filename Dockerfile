@@ -4,7 +4,6 @@ WORKDIR /app
 COPY . /app
 
 RUN pip3 install -r requirements.txt
-# run unit tests
 
 EXPOSE 5000
 CMD ["gunicorn", "app:app","-b",":5000"]
