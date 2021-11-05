@@ -24,7 +24,7 @@ def main():
 
 @app.route('/login', methods=['POST'])
 def login():
-    return 'ecdcddccd'
+    return ''
 
 
 @app.route('/asset', methods=['POST'])
