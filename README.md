@@ -10,7 +10,7 @@ Run tests:<br>
 Install requirements:<br>
 ```pip install -r requirements.txt```<br>
 Start the application:<br>
-```gunicorn --bind 0.0.0.0:5000 app:app```<br>
+```python3 app.py```<br>
 
 ## Run the app on Docker
 Build the docker image<br>

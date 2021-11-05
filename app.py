@@ -24,7 +24,7 @@ def main():
 
 @app.route('/login', methods=['POST'])
 def login():
-    return ''
+    return 'ecdcddccd'
 
 
 @app.route('/asset', methods=['POST'])
@@ -48,4 +48,4 @@ def health():
 
 
 if __name__ == "__main__":
-    app.run(port=5002)
+    app.run(port=5000, debug=True)
