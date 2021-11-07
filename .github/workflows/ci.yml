@@ -60,7 +60,10 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/asset-app
-
+      - name: k8s schema validation
+        uses: instrumenta/kubeval-action@master
+        with:
+          files: k8s-artifacts
 #      - name: Setup gcloud CLI
 #        uses: google-github-actions/setup-gcloud@master
 #        with:
