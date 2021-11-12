@@ -1,0 +1,4 @@
+# Each line is a file pattern followed by one or more owners.
+# A best practice to protecct the GitHub Actions conf. files
+# Defining a codeowner blocks external parties from sending mallicious PRs that change GitHub actions conf. files to extract repository secrets 
+/.github/workflows @rumeshmadhusanka

@@ -3,6 +3,7 @@
 docker-compose.yaml
 chromedriver
 k8s-artifacts
+tmp
 
 
 #from boilerplate
