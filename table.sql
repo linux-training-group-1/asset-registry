@@ -10,3 +10,12 @@ CREATE TABLE if not exists `asset` (
                                        UNIQUE KEY `idex` (`id`) USING BTREE,
                                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE if not exists `user` (
+                                       `username` VARCHAR(255),
+                                       `password` VARCHAR(255),
+                                       `salt` VARCHAR(255),
+                                       'admin' boolean default FALSE,
+                                       UNIQUE KEY `idexun` (`username`) USING BTREE,
+                                       PRIMARY KEY (`username`)
+) ENGINE=InnoDB;
