@@ -4,6 +4,15 @@
 ## Test the app
 Install dependencies:<br>
 ```pip install -r requirements.txt -r requirements-dev.txt```<br>
+Create a `.env` file on the project root. Add the following:
+```
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=password
+MYSQL_DB=asset_app
+MYSQL_PORT=3306
+JWT_SECRET=81492f8b-c8fb-4310-8c8f-71019810ee9e
+```
 Run tests:<br>
 ```pytest --verbose --failed-first```<br>
 
@@ -17,7 +26,7 @@ Start the application:<br>
 Build the docker image<br>
 ```docker build -t asset-app .```<br>
 Start the docker image<br>
-```docker run -itp 5000:5000 asset-app```<br>
+```docker run --env-file=.env -itp 5000:5000 asset-app```<br>
 
 ## Run the app + redis + mysql 
 Start the setup<br>
