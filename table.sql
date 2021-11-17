@@ -11,11 +11,16 @@ CREATE TABLE if not exists `asset` (
                                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+
 CREATE TABLE if not exists `user` (
-                                       `username` VARCHAR(255),
-                                       `password` VARCHAR(255),
-                                       `salt` VARCHAR(255),
-                                       'admin' boolean default FALSE,
-                                       UNIQUE KEY `idexun` (`username`) USING BTREE,
-                                       PRIMARY KEY (`username`)
+                                      `username` VARCHAR(255),
+                                      `name` varchar(255),
+                                      `password` VARCHAR(1024),
+                                      `salt` VARCHAR(1024),
+                                      `admin` boolean DEFAULT false,
+                                      UNIQUE KEY `idexun` (`username`) USING BTREE,
+                                      PRIMARY KEY (`username`)
 ) ENGINE=InnoDB;
+
+INSERT INTO asset_app.user (username, name, password, salt, admin)
+VALUES ('bob', 'Bob Anderson', 'password', 'mysalt', 1);
