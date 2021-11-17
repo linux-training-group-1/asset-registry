@@ -1,4 +1,3 @@
-import logging
 import logging.config
 
 from dotenv import load_dotenv
@@ -7,9 +6,11 @@ from flask import Flask, render_template, request, jsonify
 from utils import dbconn, jwt_tokens, validator
 
 load_dotenv()  # load env variables from environment or the .env file
+# initialize the logger using logger.conf file's config
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('app')
 
+# initialize the flask application
 app = Flask(__name__)
 
 
