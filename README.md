@@ -1,7 +1,7 @@
 # Asset Registry
 [![CI Pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml)
-## Test the app
+
 Install dependencies:<br>
 ```pip install -r requirements.txt -r requirements-dev.txt```<br>
 Create a `.env` file on the project root. Add the following:
@@ -15,6 +15,7 @@ JWT_SECRET=81492f8b-c8fb-4310-8c8f-71019810ee9e
 ```
 Run tests:<br>
 ```pytest --verbose --failed-first```<br>
+Install MySQL and Redis if running locally<br>
 
 ## Run locally
 Install requirements:<br>
@@ -39,3 +40,10 @@ Create mysql database and tables <br>
 ```source table.sql```<br>
 Add dummy data<br>
 ```source inserts.sql```<br>
+
+
+<br>
+valid token: <br>
+```
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhc3NldC1hcHAiLCJzdWIiOiJib2IiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNjM3MTY1MDA2LCJuYmYiOjE2MzcxNjUwMDYsImV4cCI6MTYzOTc1NzAwNiwianRpIjoiNDFhMjk4MjctNjQ5ZS00NGQzLThiOGUtMGI3MzgwOWE2ZjJhIn0.tIzBl4rbqLFPtjLgW60ynVvkTBfSqVVTOeeoji7FH_M
+```
