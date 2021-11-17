@@ -33,4 +33,6 @@ def encode_user(username):
 
 def validate_jwt(token):
     # todo verify jwt signature
-    return jwt.decode(token, key=os.environ['JWT_SECRET'], algorithms=encode_algo, options={"verify_signature": False})
+    data = jwt.decode(token, key=os.environ['JWT_SECRET'], algorithms=encode_algo, options={"verify_signature": False})
+    # print(data)
+    return data['sub']
