@@ -1,9 +1,14 @@
+import logging
+import logging.config
+
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
 
 from utils import dbconn, jwt_tokens, validator
 
 load_dotenv()  # load env variables from environment or the .env file
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('app')
 
 app = Flask(__name__)
 
@@ -16,20 +21,24 @@ def main():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    body = request.get_json()
-    # validate the body
-    username = body['username']
-    password = body['password']
-    if not validator.validate_user_pass(username, password):
-        return jsonify({"message": "Username or password too long"}), 400
-    # check password from the database
-    result = dbconn.check_credentials(username, password)
-    if not result:
-        return jsonify({"message": "Invalid username or password"}), 401
-    # generate the token
-    resp = {"token": jwt_tokens.encode_user(username)}
-    # send the token inside the body
-    return jsonify(resp), 200
+    try:
+        body = request.get_json()
+        # validate the body
+        username = body['username']
+        password = body['password']
+        if not validator.validate_user_pass(body):
+            return jsonify({"message": "Username or password too long"}), 400
+        # check password from the database
+        result = dbconn.check_credentials(username, password)
+        if not result:
+            return jsonify({"message": "Invalid username or password"}), 401
+        # generate the token
+        resp = {"token": jwt_tokens.encode_user(username)}
+        # send the token inside the body
+        return jsonify(resp), 200
+    except Exception as e:
+        logger.debug(e)
+        return jsonify({"message": "Server Error"}), 502
 
 
 @app.route('/api/asset', methods=['POST'])
