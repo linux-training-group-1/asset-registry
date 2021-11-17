@@ -1,5 +1,7 @@
-from flask import Flask, render_template, json, request
+from cerberus import Validator
 from dotenv import load_dotenv
+from flask import Flask, render_template, request, jsonify
+from utils import dbconn, jwt_tokens
 
 load_dotenv()  # load env variables from environment or the .env file
 # from flask_mysqldb import MySQL
@@ -24,7 +26,21 @@ def main():
 
 @app.route('/login', methods=['POST'])
 def login():
-    return ''
+    body = request.get_json()
+    # validate the body
+    schema = {'username': {'type': 'string', 'maxlength': 255},
+              "password": {'type': 'string', 'maxlength': 255}}
+    validator = Validator(schema)
+    if not validator.validate(body):
+        return jsonify({"message": "Username or password too long"}), 400
+    # check password from the database
+    result = dbconn.check_credentials(body['username'], body['password'])
+    if not result:
+        return jsonify({"message": "Invalid username or password"}), 401
+    # generate the token
+    resp = {"token": jwt_tokens.encode_user(body['username'])}
+    # send the token inside the body
+    return jsonify(resp), 200
 
 
 @app.route('/asset', methods=['POST'])

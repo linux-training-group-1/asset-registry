@@ -13,7 +13,7 @@ def get_connection():
                            cursorclass=pymysql.cursors.DictCursor)
 
 
-def check_username_password(username, password, admin=True):
+def check_credentials(username, password, admin=True):
     connection = get_connection()
     # with connection:
     #     with connection.cursor() as cursor:
