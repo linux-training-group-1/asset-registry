@@ -1,6 +1,7 @@
+import os
+
 import pymysql
 import pymysql.cursors
-import os
 
 # Singleton connection
 connection = None
@@ -38,3 +39,31 @@ def check_credentials(username, password, admin=True):
         cursor.execute(sql, (admin, username, password))
         # Query should match only to one row if credentials are found
         return cursor.rowcount == 1
+
+
+def get_item_by_id(id):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        # Read a single record
+        sql = "SELECT * FROM `asset` WHERE `id`=%s"
+        cursor.execute(sql, id)
+        # Query should match only to one row if credentials are found
+        return cursor.fetchone()
+
+
+def get_items_by_name(name, limit):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        # Read a single record
+        sql = "SELECT * FROM `asset` WHERE MATCH(`name`) AGAINST(%s IN NATURAL LANGUAGE MODE) limit %s"
+        cursor.execute(sql, name, limit)
+        # Query should match multiple rows
+        return cursor.fetchall()
+
+
+def add_item(name, owner, description, location, criticality):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = "INSERT INTO `asset` (`name`, `owner`,`description`,`location`,`criticality`) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql, (name, owner, description, location, criticality))
+    conn.commit()
