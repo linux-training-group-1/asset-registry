@@ -4,24 +4,24 @@ import pymysql
 import pymysql.cursors
 
 # Singleton connection
-connection = None
+_connection = None
 
 
 # Connect to the database
-def get_connection():
-    global connection
-    if connection is None:
-        connection = pymysql.connect(host=os.environ['MYSQL_HOST'],
-                                     user=os.environ['MYSQL_USER'],
-                                     password=os.environ['MYSQL_PASSWORD'],
-                                     database=os.environ['MYSQL_DB'],
-                                     port=int(os.environ['MYSQL_PORT']),
-                                     cursorclass=pymysql.cursors.DictCursor)
-    return connection
+def _get_connection():
+    global _connection
+    if _connection is None:
+        _connection = pymysql.connect(host=os.environ['MYSQL_HOST'],
+                                      user=os.environ['MYSQL_USER'],
+                                      password=os.environ['MYSQL_PASSWORD'],
+                                      database=os.environ['MYSQL_DB'],
+                                      port=int(os.environ['MYSQL_PORT']),
+                                      cursorclass=pymysql.cursors.DictCursor)
+    return _connection
 
 
 def check_credentials(username, password, admin=True):
-    conn = get_connection()
+    conn = _get_connection()
     with conn.cursor() as cursor:
         # Read a single record
         # TODO: check salt + hashed password
@@ -32,7 +32,7 @@ def check_credentials(username, password, admin=True):
 
 
 def get_item_by_id(id):
-    conn = get_connection()
+    conn = _get_connection()
     with conn.cursor() as cursor:
         # Read a single record
         sql = "SELECT * FROM `asset` WHERE `id`=%s"
@@ -42,7 +42,7 @@ def get_item_by_id(id):
 
 
 def get_items_by_name(name, limit):
-    conn = get_connection()
+    conn = _get_connection()
     with conn.cursor() as cursor:
         # Read a single record
         sql = "SELECT * FROM `asset` WHERE MATCH(`name`) AGAINST(%s IN NATURAL LANGUAGE MODE) limit %s"
@@ -52,7 +52,7 @@ def get_items_by_name(name, limit):
 
 
 def add_item(name, owner, description, location, criticality):
-    conn = get_connection()
+    conn = _get_connection()
     with conn.cursor() as cursor:
         sql = "INSERT INTO `asset` (`name`, `owner`,`description`,`location`,`criticality`) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute(sql, (name, owner, description, location, criticality))
