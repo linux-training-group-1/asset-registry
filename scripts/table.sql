@@ -6,7 +6,8 @@ CREATE TABLE if not exists `asset` (
                                        `owner` VARCHAR(255),
                                        `description` VARCHAR(1000),
                                        `location` VARCHAR(1000),
-                                       `criticality` enum('Critical','Medium','Low') DEFAULT 'Low'
+                                       `criticality` enum('Critical','Medium','Low') DEFAULT 'Low',
+                                        FULLTEXT ftidx (`name`)
 ) ENGINE=InnoDB;
 
 
