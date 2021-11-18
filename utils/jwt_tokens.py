@@ -1,5 +1,4 @@
 import datetime
-import json
 from datetime import timezone
 import uuid
 
@@ -35,4 +34,4 @@ def validate_jwt(token):
     # todo verify jwt signature
     data = jwt.decode(token, key=os.environ['JWT_SECRET'], algorithms=encode_algo, options={"verify_signature": False})
     # print(data)
-    return data['sub']
+    return "sub" in data
