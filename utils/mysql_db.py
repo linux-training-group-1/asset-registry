@@ -41,12 +41,12 @@ def get_item_by_id(id):
         return cursor.fetchone()
 
 
-def get_items_by_name(name, limit):
+def get_items_by_name(name, limit, offset=0):
     conn = _get_connection()
     with conn.cursor() as cursor:
         # Read a single record
-        sql = "SELECT * FROM `asset` WHERE MATCH(`name`) AGAINST(%s IN NATURAL LANGUAGE MODE) limit %s"
-        cursor.execute(sql, name, limit)
+        sql = "SELECT * FROM `asset` WHERE MATCH(`name`) AGAINST(%s IN NATURAL LANGUAGE MODE) limit %s %s"
+        cursor.execute(sql, (name, offset, limit))
         # Query should match multiple rows
         return cursor.fetchall()
 
