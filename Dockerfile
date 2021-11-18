@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.14
+FROM python:3.8
 
 ARG PORT=5000
 
