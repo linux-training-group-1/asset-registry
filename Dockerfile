@@ -7,7 +7,7 @@ COPY . /app
 
 RUN pip3 install -r requirements.txt
 
-RUN adduser --no-create-home --disabled-login --group assetuser
+RUN addgroup -S assetuser && adduser -S -G assetuser assetuser
 USER assetuser
 
 EXPOSE $PORT
