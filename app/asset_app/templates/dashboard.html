@@ -1,0 +1,27 @@
+{% extends 'dashboard-base.html' %}
+
+{% block head %}
+<title>Dashboard</title>
+{% endblock %}
+
+{% block body %}
+<div id="dashboard-page">
+
+    <a href="{{ url_for('list_assets') }}">
+        <div class="card" href="https://google.com">
+            <p class="card-title">Total Assets</p>
+
+            <p class="count">{{ total_assets }}</p>
+        </div>
+    </a>
+</div>
+
+
+
+<style>
+    .dashboard-link {
+        transition: var(--transition);
+        background-color: var(--primary-500);
+    }
+</style>
+{% endblock %}

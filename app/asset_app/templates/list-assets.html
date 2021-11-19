@@ -1,0 +1,44 @@
+{% extends 'dashboard-base.html' %}
+
+{% block head %}
+<title>List Assets</title>
+
+{% endblock %}
+
+{% block body %}
+<div id="list-assets-page">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Criticality</th>
+            <th></th>
+        </tr>
+        {% for asset in all_assets %}
+        <tr>
+            <td> {{ asset.asset_id }}</td>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.owner }}</td>
+            <td>{{ asset.description }}</td>
+            <td>{{ asset.location }}</td>
+            <td>{{ asset.criticality }}</td>
+            <td> <a href="{{ url_for('edit_asset',asset_id=asset.asset_id) }}"> <span
+                        id="edit-asset-btn">Edit</span></a>
+            </td>
+
+        </tr>
+        </a>
+        {% endfor %}
+    </table>
+</div>
+
+<style>
+    .list-assets-link {
+        transition: var(--transition);
+        background-color: var(--primary-500);
+    }
+</style>
+{% endblock %}

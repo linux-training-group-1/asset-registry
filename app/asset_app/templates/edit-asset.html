@@ -1,0 +1,75 @@
+{% extends 'dashboard-base.html' %}
+
+{% block head %}
+<title>Add Assets</title>
+{% endblock %}
+
+{% block body %}
+<div id="edit-asset-page">
+    <form class="form" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+            {{ form.assetName.label(class='form-label') }}
+            {{ form.assetName(class='form-input' ) }}
+
+        </div>
+        <div class="form-row">
+            {{ form.assetID.label(class='form-label') }}
+            {{ form.assetID(class='form-input') }}
+
+        </div>
+        <div class="form-row">
+            {{ form.assetOwner.label(class='form-label') }}
+            {{ form.assetOwner(class='form-input') }}
+
+        </div>
+        <div class="form-row">
+            {{ form.assetDescription.label(class='form-label') }}
+            {{ form.assetDescription(class='form-input') }}
+
+        </div>
+        <div class="form-row">
+            {{ form.assetLocation.label(class='form-label') }}
+            {{ form.assetLocation(class='form-input') }}
+
+        </div>
+        <div class="form-row">
+
+            {{ form.assetCriticality.label(class='form-label') }}
+            {{ form.assetCriticality(class='form-input') }}
+
+        </div>
+        <div class="form-row">
+
+            {{ form.submit_update(class='btn') }}
+            {{ form.submit_delete(class='btn red') }}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category,message in messages %}
+            {% if category=='error' %}
+
+            <p class="error">{{ message }}</p>
+
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+        </div>
+    </form>
+</div>
+
+<style>
+    .add-asset-link {
+        transition: var(--transition);
+        background-color: var(--primary-500);
+    }
+
+    .red {
+        background-color: var(--red-dark);
+        color: white;
+    }
+</style>
+
+{% endblock %}
