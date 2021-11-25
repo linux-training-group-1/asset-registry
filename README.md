@@ -11,10 +11,10 @@ MYSQL_USER=root
 MYSQL_PASSWORD=password
 MYSQL_DB=asset_app
 MYSQL_PORT=3306
-JWT_SECRET=81492f8b-c8fb-4310-8c8f-71019810ee9e
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_DB=0
+SECRET_KEY=bff4eb94deb028b293786461
 ```
 Run tests:<br>
 ```pytest --verbose --failed-first```<br>
