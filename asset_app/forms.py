@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, SelectField, RadioField, PasswordField
-from wtforms.validators import Length, DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, ValidationError
+
 from asset_app.models import Asset
 
 
@@ -29,7 +30,7 @@ class AddAssetForm(FlaskForm):
 class SearchAssetForm(FlaskForm):
     search_query = StringField(validators=[DataRequired()])
     search_type = RadioField(validators=[DataRequired()], choices=[
-                             ('id', 'ID'), ('name', 'Name')], default='name')
+        ('id', 'ID'), ('name', 'Name')], default='name')
     submit = SubmitField(label='Search')
 
 
