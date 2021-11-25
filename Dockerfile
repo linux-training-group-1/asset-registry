@@ -1,13 +1,12 @@
-FROM python:3.8-alpine3.14
+FROM python:3.8-slim
 
 ARG PORT=5000
 
 WORKDIR /app
 COPY . /app
-RUN apk add python python-dev py2-pip autoconf automake g++ make --no-cache
 RUN pip3 install -r requirements.txt
 
-RUN addgroup -S assetuser && adduser -S -G assetuser assetuser
+RUN groupadd -g 61000 assetuser && useradd -g 61000 -l -M -s /bin/false -u 61000 assetuser
 USER assetuser
 
 EXPOSE $PORT
