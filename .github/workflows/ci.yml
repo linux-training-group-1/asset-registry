@@ -1,19 +1,11 @@
-name: CI/CD pipeline
+name: CI pipeline
 
 on:
   push:
     branches:
       - 'main'
-
-env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }} # TODO: set this env var on git repo
-  GKE_CLUSTER: cluster-1
-  GKE_ZONE: asia-south1
-  DEPLOYMENT_NAME: gke-test
-  GITHUB_SHA: ${{ github.sha }}
-
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
@@ -21,7 +13,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.10"
       - name: Install python dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -60,35 +52,6 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/asset-app
-#      - name: k8s schema validation
-#        uses: instrumenta/kubeval-action@master
-#        with:
-#          files: k8s-artifacts
-#      - name: Setup gcloud CLI
-#        uses: google-github-actions/setup-gcloud@master
-#        with:
-#          service_account_key: ${{ secrets.GKE_SA_KEY }}
-#          project_id: ${{ secrets.GKE_PROJECT }}
-#      - name: Install Helm
-#        run: |
-#          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-#
-#      - name: Get the GKE credentials so we can deploy to the cluster
-#        uses: google-github-actions/get-gke-credentials@master
-#        with:
-#          cluster_name: ${{ env.GKE_CLUSTER }}
-#          location: ${{ env.GKE_ZONE }}
-#          credentials: ${{ secrets.GKE_SA_KEY }}
-#      - name: Deploy to GKE
-#        run: |
-#          gcloud container clusters get-credentials $GKE_CLUSTER \
-#            --zone $GKE_ZONE \
-#            --project $GKE_PROJECT
-#          helm upgrade $GKE_PROJECT $GKE_PROJECT-cluster/ \
-#            --set randocats.image.tag=$GITHUB_SHA \
-#            --wait
-#          kubectl rollout status deployment/$DEPLOYMENT_NAME
-#          kubectl get services -o wide
-#
+
 # TODO: create a helm chart
 # TODO: fix the k8s deployment
