@@ -4,6 +4,8 @@ ARG PORT=5000
 
 WORKDIR /app
 COPY . /app
+
+RUN apt-get update --no-cache -y
 RUN pip3 install -r requirements.txt
 
 RUN groupadd -g 61000 assetuser && useradd -g 61000 -l -M -s /bin/false -u 61000 assetuser
