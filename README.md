@@ -24,7 +24,7 @@ Install MySQL and Redis if running locally<br>
 Install requirements:<br>
 ```pip install -r requirements.txt```<br>
 Start the application:<br>
-```python3 app.py```<br>
+```python3 run_locally.py```<br>
 
 ## Run the app on Docker
 Build the docker image<br>
