@@ -4,7 +4,7 @@ ARG PORT=5000
 
 WORKDIR /app
 COPY . /app
-
+RUN apk add python python-dev py2-pip autoconf automake g++ make --no-cache
 RUN pip3 install -r requirements.txt
 
 RUN addgroup -S assetuser && adduser -S -G assetuser assetuser
