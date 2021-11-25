@@ -72,7 +72,6 @@ def search():
 @app.route('/add-asset', methods=['GET', 'POST'])
 @login_required
 def add_asset():
-
     form = AddAssetForm()
 
     if form.validate_on_submit():
@@ -106,7 +105,6 @@ def list_assets():
 @app.route('/edit-asset', methods=['GET', 'POST'])
 @login_required
 def edit_asset():
-
     form = EditAssetForm()
 
     asset_id = request.args.get("asset_id")
@@ -128,7 +126,6 @@ def edit_asset():
             return redirect(url_for('list_assets'))
 
         if delete:
-
             db.session.delete(asset)
             db.session.commit()
             flash(f'Asset deleted successfully', category='success')
@@ -165,3 +162,8 @@ def logout_page():
     logout_user()
     flash("You have been logged out", category='info')
     return redirect(url_for('home_page'))
+
+
+@app.route('/health', methods=['GET'])
+def health():
+    return ''
