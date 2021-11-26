@@ -69,7 +69,7 @@ jobs:
         run: ls config -la
       - name: Replace the older version tag
         if: env.SHOULD_PUSH == 1
-        run: python3 utils/replace_tag.py config/k8s-artifacts/asset-app-deployment.yaml ${{ env.OLD_DOCKER_TAG }} ${{ env.DOCKER_IMAGE_TAG }}
+        run: python3 utils/replace_tag.py config/k8s-artifacts/asset-app-deployment.yaml ${{ env.DOCKER_IMAGE_TAG }}
       - name: Commit & Push changes
         if: env.SHOULD_PUSH == 1
         uses: actions-js/push@master
