@@ -56,7 +56,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY }}"/"${{ env.DOCKER_IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
       - name: Checkout the app config repo
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1

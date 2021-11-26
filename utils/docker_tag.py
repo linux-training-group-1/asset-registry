@@ -12,6 +12,7 @@ docker_password = sys.argv[3]
 commit_msg = os.environ['COMMIT_MSG']
 docker_host = "https://dock-reg-0001.ml"
 docker_api = "/v2/asset-app/tags/list"
+env_file = os.getenv('GITHUB_ENV')
 "This is an example commit message [version=3.4.6] in github"
 "example version string 2.3.5-rc.1"
 
@@ -44,16 +45,21 @@ def get_docker_tags():
     return response.json()['tags']
 
 
+def set_actions_env_var(var_name, value):
+    with open(env_file, "a") as my_file:
+        my_file.write(str(var_name) + "=" + str(value))
+
+
 new_ver = get_version_from_commit(commit_msg)
 if new_ver:
     if new_ver == "false":
-        os.environ["SHOULD_PUSH"] = "0"
+        set_actions_env_var("SHOULD_PUSH", "0")
         print("Not pushing the image to k8s")
         exit(0)
     else:
         new_tag = app_name + ":" + str(new_ver)
-        os.environ["DOCKER_IMAGE_TAG"] = new_tag
-        os.environ["SHOULD_PUSH"] = "1"
+        set_actions_env_var("DOCKER_IMAGE_TAG", new_tag)
+        set_actions_env_var("SHOULD_PUSH", "1")
         print("New tag: " + new_tag)
         exit(0)
 else:
@@ -64,12 +70,12 @@ else:
     latest_version = version.parse(latest_version_str)
     if str(latest_version) == "latest":
         new_tag = app_name + ":" + "0.1.0"
-        os.environ["DOCKER_IMAGE_TAG"] = new_tag
-        os.environ["SHOULD_PUSH"] = "1"
+        set_actions_env_var("DOCKER_IMAGE_TAG", new_tag)
+        set_actions_env_var("SHOULD_PUSH", "1")
         print("New tag: " + new_tag)
     else:
         new_tag = app_name + ":" + str(latest_version.major) + "." + str(latest_version.minor) + "." + str(
             latest_version.micro + 1)
-        os.environ["DOCKER_IMAGE_TAG"] = new_tag
-        os.environ["SHOULD_PUSH"] = "1"
+        set_actions_env_var("DOCKER_IMAGE_TAG", new_tag)
+        set_actions_env_var("SHOULD_PUSH", "1")
         print("New tag: " + new_tag)
