@@ -42,6 +42,7 @@ if new_ver:
     else:
         new_tag = app_name + ":" + str(new_ver)
         os.environ["DOCKER_IMAGE_TAG"] = new_tag
+        os.environ["SHOULD_PUSH"] = "1"
         print("New tag: " + new_tag)
         exit(0)
 else:
