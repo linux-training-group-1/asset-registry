@@ -52,6 +52,7 @@ jobs:
       - name: Print env var
         run: echo $DOCKER_IMAGE_TAG
       - name: Build and push
+        if: env.SHOULD_PUSH == 1
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -59,7 +60,7 @@ jobs:
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
       - name: Checkout the app config repo
         uses: actions/checkout@v2
-        if: env.SHOULD_PUSH == 1
+
         with:
             repository: linux-training-group-1/asset-registry-config
             path: './config'
