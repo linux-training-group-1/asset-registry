@@ -69,6 +69,8 @@ jobs:
       - name: ls
         if: env.SHOULD_PUSH == 1
         run: ls config -la
+      - name: Actor
+        run: echo ${{ github.actor }}
       - name: Replace the older version tag
         if: env.SHOULD_PUSH == 1
         run: python3 utils/replace_tag.py config/k8s-artifacts/asset-app-deployment.yaml ${{ env.DOCKER_IMAGE_TAG }}
