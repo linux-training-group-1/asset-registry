@@ -52,7 +52,7 @@ def set_actions_env_var(var_name, value):
 
 new_ver = get_version_from_commit(commit_msg)
 if new_ver:
-    if new_ver == "false":
+    if new_ver.lower() == "false":
         set_actions_env_var("SHOULD_PUSH", "0")
         print("Not pushing the image to k8s")
         exit(0)

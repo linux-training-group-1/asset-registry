@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1
         with:
-            repository: https://github.com/linux-training-group-1/asset-registry-config
+            repository: linux-training-group-1/asset-registry-config
             path: './config'
       - name: ls
         if: env.SHOULD_PUSH == 1
