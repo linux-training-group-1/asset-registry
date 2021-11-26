@@ -62,6 +62,8 @@ jobs:
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1
         with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0
           repository: linux-training-group-1/asset-registry-config
           path: './config'
       - name: ls
