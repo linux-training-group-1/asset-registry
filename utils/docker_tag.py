@@ -35,18 +35,28 @@ def get_docker_images():
 
 new_ver = get_version_from_commit(commit_msg)
 if new_ver:
-    print(app_name + ":" + new_ver)
+    if new_ver == "false":
+        os.environ["SHOULD_PUSH"] = "0"
+        print("Not pushing the image to k8s")
+        exit(0)
+    else:
+        new_tag = app_name + ":" + str(new_ver)
+        os.environ["DOCKER_IMAGE_TAG"] = new_tag
+        print("New tag: " + new_tag)
+        exit(0)
 else:
     all_images = get_docker_images()
     # print(all_images)
     latest_version_str = get_latest_docker_tag(all_images)
     latest_version = version.parse(latest_version_str)
-    if str(latest_version) == "false":
-        print("false")
-        exit(0)
     if str(latest_version) == "latest":
-        print("0.1.0")
-        exit(0)
-    new_tag = app_name + ":" + str(latest_version.major) + "." + str(latest_version.minor) + "." + str(
-        latest_version.micro + 1)
-    print(new_tag)
+        new_tag = app_name + ":" + "0.1.0"
+        os.environ["DOCKER_IMAGE_TAG"] = new_tag
+        os.environ["SHOULD_PUSH"] = "1"
+        print("New tag: ")
+    else:
+        new_tag = app_name + ":" + str(latest_version.major) + "." + str(latest_version.minor) + "." + str(
+            latest_version.micro + 1)
+        os.environ["DOCKER_IMAGE_TAG"] = new_tag
+        os.environ["SHOULD_PUSH"] = "1"
+        print("New tag: " + new_tag)
