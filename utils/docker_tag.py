@@ -50,6 +50,14 @@ def set_actions_env_var(var_name, value):
 
 
 new_ver = get_version_from_commit(commit_msg)
+all_images = get_docker_tags()
+print(all_images)
+latest_version_str = get_latest_docker_tag(all_images)
+latest_version = version.parse(latest_version_str)
+old_tag = app_name + ":" + str(latest_version)
+set_actions_env_var("OLD_DOCKER_TAG", old_tag)
+print("Old tag: "+old_tag)
+
 if new_ver:
     if new_ver.lower() == "false":
         set_actions_env_var("SHOULD_PUSH", "0")
@@ -62,11 +70,6 @@ if new_ver:
         print("New tag: " + new_tag)
         exit(0)
 else:
-    all_images = get_docker_tags()
-    print(all_images)
-    latest_version_str = get_latest_docker_tag(all_images)
-    print()
-    latest_version = version.parse(latest_version_str)
     if str(latest_version) == "latest":
         new_tag = app_name + ":" + "0.1.0"
         set_actions_env_var("DOCKER_IMAGE_TAG", new_tag)
