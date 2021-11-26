@@ -39,8 +39,8 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASS }}
-      - name: Build docker image
-        run: docker build . -t ${{ secrets.DOCKER_REGISTRY }}/asset-app
+#      - name: Build docker image
+#        run: docker build . -t ${{ secrets.DOCKER_REGISTRY }}/asset-app
 #      - name: Container image scan
 #        uses: Azure/container-scan@v0.1
 #        with:
@@ -49,12 +49,14 @@ jobs:
       #        todo change continue-on-error
       - name: Get new Docker image tag
         run: COMMIT_MSG="${{ github.event.head_commit.message }}" python3 utils/docker_tag.py asset-app
+      - name: Print env var
+        run: echo ${{ env.DOCKER_IMAGE_TAG }}
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_REGISTRY }}"/"${{ env.DOCKER_IMAGE_TAG }}
       - name: Checkout the app config repo
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1
