@@ -1,7 +1,6 @@
 import os
 import sys
 
-import docker
 import requests
 from packaging import version
 import re
