@@ -55,19 +55,16 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
-
-  push-config:
-    needs: build
-    runs-on: ubuntu-20.04
-    if: env.SHOULD_PUSH == 1
-    steps:
       - name: Checkout the app config repo
         uses: actions/checkout@v2
+        if: env.SHOULD_PUSH == 1
         with:
-          repository: https://github.com/linux-training-group-1/asset-registry-config
-          path: './config'
+            repository: https://github.com/linux-training-group-1/asset-registry-config
+            path: './config'
       - name: ls
+        if: env.SHOULD_PUSH == 1
         run: ls config -la
+
 
 
 
