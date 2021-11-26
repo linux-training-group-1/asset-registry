@@ -7,7 +7,7 @@ f = open(file_name, 'r')
 file_data = f.read()
 f.close()
 
-new_data = re.sub('/asset-app:.*', new_tag, file_data, flags=re.M)
+new_data = re.sub('/asset-app:.*', "/"+new_tag, file_data, flags=re.M)
 
 f = open(file_name, 'w')
 f.write(new_data)
