@@ -28,7 +28,7 @@ jobs:
           pytest --verbose --failed-first
           ls -la
         env:
-         DISPLAY: :99
+          DISPLAY: :99
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -45,13 +45,31 @@ jobs:
         uses: Azure/container-scan@v0.1
         with:
           image-name: ${{ secrets.DOCKER_REGISTRY }}/asset-app
-        continue-on-error: false
+        continue-on-error: true
+      #        todo change continue-on-error
+      - name: Get new Docker image tag
+        run: COMMIT_MSG=${{ github.event.head_commit.message }} python3 utils/docker_tag.py asset-app
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY }}/asset-app
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
+
+  push-config:
+    needs: build
+    runs-on: ubuntu-20.04
+    if: env.SHOULD_PUSH == 1
+    steps:
+      - name: Checkout the app config repo
+        uses: actions/checkout@v2
+        with:
+          repository: https://github.com/linux-training-group-1/asset-registry-config
+          path: './config'
+      - name: ls
+        run: ls config -la
+
+
 
 # TODO: create a helm chart
 # TODO: fix the k8s deployment
