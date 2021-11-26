@@ -47,7 +47,7 @@ def get_docker_tags():
 
 def set_actions_env_var(var_name, value):
     with open(env_file, "a") as my_file:
-        my_file.write(str(var_name) + "=" + str(value))
+        my_file.write(str(var_name) + "=" + str(value)+"\n")
 
 
 new_ver = get_version_from_commit(commit_msg)
