@@ -47,14 +47,14 @@ if new_ver:
         exit(0)
 else:
     all_images = get_docker_images()
-    # print(all_images)
+    print(all_images)
     latest_version_str = get_latest_docker_tag(all_images)
     latest_version = version.parse(latest_version_str)
     if str(latest_version) == "latest":
         new_tag = app_name + ":" + "0.1.0"
         os.environ["DOCKER_IMAGE_TAG"] = new_tag
         os.environ["SHOULD_PUSH"] = "1"
-        print("New tag: ")
+        print("New tag: "+new_tag)
     else:
         new_tag = app_name + ":" + str(latest_version.major) + "." + str(latest_version.minor) + "." + str(
             latest_version.micro + 1)
