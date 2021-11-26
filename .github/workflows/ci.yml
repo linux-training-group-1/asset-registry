@@ -50,7 +50,7 @@ jobs:
       - name: Get new Docker image tag
         run: COMMIT_MSG="${{ github.event.head_commit.message }}" python3 utils/docker_tag.py asset-app ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASS }}
       - name: Print env var
-        run: echo ${{ env.DOCKER_IMAGE_TAG }}
+        run: echo $DOCKER_IMAGE_TAG
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
