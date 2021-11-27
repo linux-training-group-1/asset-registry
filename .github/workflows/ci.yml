@@ -86,13 +86,20 @@ jobs:
 #        uses: github/codeql-action/autobuild@v1
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
-
-
-  build-and-push:
-    name: Push to the docker reg. and to config repo
+  test-staging:
+    name: Test in staging env.
     needs:
       - test
       - scan
+    runs-on: ubuntu-20.04
+    steps:
+      - name: TODO Implement
+        run: echo "TODO Implement"
+  build-and-push:
+    name: Push to Production
+    needs:
+      - test-staging
+      - analyze
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
