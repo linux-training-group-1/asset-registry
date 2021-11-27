@@ -20,5 +20,5 @@ create table user
 create user 'asset-app'@'%' identified by 'akjgSDf#69';
 grant all privileges on asset_db.* to 'asset-app'@'%';
 
-insert into asset_db.`user` (user_id, username, pwd) VALUES (1,'admin',''$2a$12$9AXmYWNIHyPd/5HWytBVu.bq3oQ7yy5arXF2Pqf3Q7UGbQJrxzfrS'')
+insert into asset_db.`user` (user_id, username, pwd) VALUES (1,'admin','$2a$12$9AXmYWNIHyPd/5HWytBVu.bq3oQ7yy5arXF2Pqf3Q7UGbQJrxzfrS')
 -- user name is admin, password is password
