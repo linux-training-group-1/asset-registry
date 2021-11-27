@@ -5,7 +5,8 @@ on:
     branches:
       - 'main'
 jobs:
-  build:
+  test:
+    name: Unit and Integration Tests
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
@@ -14,21 +15,88 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
-      - name: Install python dependencies
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Install python dev dependencies
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install -r requirements.txt -r requirements-dev.txt
-      #      - name: Setup Chrome webdriver
-      #        uses: nanasess/setup-chromedriver@master
-      #      - name: Setup Chrome Display
-      #        run: |
-      #          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
-      #      - name: Test with pytest
-      #        run: |
-      #          pytest --verbose --failed-first
-      #          ls -la
-      #        env:
-      #          DISPLAY: :99
+          pip3 install -r requirements-dev.txt
+      - name: Setup Chrome webdriver
+        uses: nanasess/setup-chromedriver@master
+      - name: Setup Chrome Display
+        run: |
+            sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
+      - name: Install the MySQL client
+        run: apt-get install mysql-client --no-cache
+      - name: Docker compose up
+        run: docker-compose up -d
+      - name: Wait for 5 seconds
+        run: sleep 5
+      - name: Test with pytest
+        run: |
+          pytest --verbose --failed-first
+          ls -la
+        env:
+          DISPLAY: :99
+      - name: Kill the docker compose
+        run: docker-compose kill
+
+  scan:
+    name: Scan for image vulnerabilties
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build the docker image
+        run: docker build . -t ${{ secrets.DOCKER_REGISTRY }}/asset-app
+      - name: Container image scan
+        uses: Azure/container-scan@v0.1
+        with:
+          image-name: ${{ secrets.DOCKER_REGISTRY }}/asset-app
+          continue-on-error: true
+#            todo change continue-on-error
+
+  analyze:
+    name: Code Quality Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+  build:
+    needs:
+      - test
+      - scan
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -39,14 +107,6 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASS }}
-      - name: Build docker image
-        run: docker build . -t ${{ secrets.DOCKER_REGISTRY }}/asset-app
-      #      - name: Container image scan
-      #        uses: Azure/container-scan@v0.1
-      #        with:
-      #          image-name: ${{ secrets.DOCKER_REGISTRY }}/asset-app
-      #        continue-on-error: true
-      #        todo change continue-on-error
       - name: Get new Docker image tag
         run: COMMIT_MSG="${{ github.event.head_commit.message }}" python3 utils/docker_tag.py asset-app ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASS }}
       - name: Print env var
@@ -83,9 +143,6 @@ jobs:
           directory: './config'
           github_token: ${{ secrets.PERSONAL_COMMIT_TOKEN }}
           message: 'Updating th docker image tag via CI; triggered by:'${{ github.actor }}
-
-
-
 
 # TODO: create a helm chart
 # TODO: fix the k8s deployment
