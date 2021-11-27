@@ -36,7 +36,7 @@ jobs:
         run: sleep 15
       - name: Add mysql tables and data
         run: |
-          mysql -h localhost -P 3306 --protocol=tcp -u root -p password
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password
           source scripts/table.sql
       - name: Test with pytest
         run: |
