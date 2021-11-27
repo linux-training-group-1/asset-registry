@@ -30,7 +30,7 @@ services:
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER
+#      - MYSQL_USER=asset-app
     ports:
       - "3306:3306"
 volumes:
