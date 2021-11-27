@@ -139,7 +139,7 @@ jobs:
           repository: linux-training-group-1/asset-registry-config
           directory: './config'
           github_token: ${{ secrets.PERSONAL_COMMIT_TOKEN }}
-          message: 'Updating th docker image tag via CI; triggered by:'${{ github.actor }}
+          message: Updating the docker image tag via CI; triggered by ${{ github.actor }}
 
 # TODO: create a helm chart
 # TODO: fix the k8s deployment
