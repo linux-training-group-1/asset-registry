@@ -62,10 +62,7 @@ jobs:
         uses: Azure/container-scan@v0.1
         with:
           image-name: ${{ secrets.DOCKER_REGISTRY }}/asset-app
-          continue-on-error: true
-  #            todo change continue-on-error
-      - name: Continue
-        run: echo "Continue"
+        continue-on-error: true
 
   analyze:
     name: Code Quality Scanning
