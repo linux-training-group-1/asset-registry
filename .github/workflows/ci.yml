@@ -33,7 +33,7 @@ jobs:
       - name: Docker compose up
         run: docker-compose up -d
       - name: Wait for 5 seconds
-        run: sleep 5
+        run: sleep 15
       - name: Add mysql tables and data
         run: |
           mysql -h localhost -P 3306 --protocol=tcp -u root -p password
@@ -88,6 +88,8 @@ jobs:
 #        uses: github/codeql-action/autobuild@v1
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
+      - name: Continue
+        run: echo "Continue"
 
   build:
     needs:
