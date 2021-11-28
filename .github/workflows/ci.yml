@@ -157,7 +157,7 @@ jobs:
       - name: Run tests
         run: echo "TODO Implement"
       - name: Delete kubernetes componenets from cluster
-        run: echo "TODO Implement"
+        run: kubectl --kubeconfig ${{ env.KUBECONFIG }} delete -f final.yaml -n staging
 
   build-and-push:
     name: Push to Production
