@@ -7,9 +7,9 @@ Install dependencies:<br>
 Create a `.env` file on the project root. Add the following:
 ```
 MYSQL_HOST=localhost
-MYSQL_USER=root
-MYSQL_PASSWORD=password
-MYSQL_DB=asset_app
+MYSQL_USER=asset-app
+MYSQL_PASSWORD=akjgSDf#69
+MYSQL_DB=asset_db
 MYSQL_PORT=3306
 REDIS_HOST=localhost
 REDIS_PORT=6379
