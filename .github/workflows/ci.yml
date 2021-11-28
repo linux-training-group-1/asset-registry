@@ -36,6 +36,19 @@ jobs:
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       - name: Install the MySQL client
         run: sudo apt-get install mysql-client
+      - name: Create a .env file
+        run: |
+          cat << EOF > .env
+          MYSQL_HOST=localhost
+          MYSQL_USER=asset-app
+          MYSQL_PASSWORD=akjgSDf#69
+          MYSQL_DB=asset_db
+          MYSQL_PORT=3306
+          REDIS_HOST=localhost
+          REDIS_PORT=6379
+          REDIS_DB=0
+          SECRET_KEY=bff4eb94deb028b293786461
+          EOF
       - name: Docker compose up
         run: docker-compose up -d
       - name: Wait for 15 seconds for the setup to start
