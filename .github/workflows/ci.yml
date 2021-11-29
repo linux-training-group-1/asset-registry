@@ -161,9 +161,9 @@ jobs:
 
   build-and-push:
     name: Push to Production
-    needs:
+#    needs:
 #      - test-staging
-      - analyze
+#      - analyze
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
