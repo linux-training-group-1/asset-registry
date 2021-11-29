@@ -43,10 +43,3 @@ Create mysql database and tables <br>
 ```source scripts/table.sql```<br>
 Add dummy data<br>
 ```source scripts/inserts.sql```<br>
-
-
-<br>
-A valid jwt token: <br>
-```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhc3NldC1hcHAiLCJzdWIiOiJib2IiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNjM3MTY1MDA2LCJuYmYiOjE2MzcxNjUwMDYsImV4cCI6MTYzOTc1NzAwNiwianRpIjoiNDFhMjk4MjctNjQ5ZS00NGQzLThiOGUtMGI3MzgwOWE2ZjJhIn0.tIzBl4rbqLFPtjLgW60ynVvkTBfSqVVTOeeoji7FH_M
-```
