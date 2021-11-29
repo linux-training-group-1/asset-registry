@@ -162,7 +162,7 @@ jobs:
   build-and-push:
     name: Push to Production
     needs:
-      - test-staging
+#      - test-staging
       - analyze
     runs-on: ubuntu-20.04
     steps:
@@ -203,9 +203,13 @@ jobs:
           fetch-depth: 0
           repository: linux-training-group-1/asset-registry-config
           path: './config'
-      - name: Replace the older version tag
+      - name: Get the new tag to DOCKER_NEW_TAG
         if: env.SHOULD_PUSH == 1
-        run: python3 utils/replace_tag.py config/k8s-artifacts/asset-app-deployment.yaml ${{ env.DOCKER_IMAGE_TAG }}
+        run: python3 utils/get_new_tag.py ${{ env.DOCKER_IMAGE_TAG }}
+      - name: Set the tag in prod env
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq e -i '.images[0].newTag = "${{ env.DOCKER_NEW_TAG }}"' config/environments/production/kustomization.yaml
       - name: Commit & Push changes
         if: env.SHOULD_PUSH == 1
         uses: actions-js/push@master
@@ -214,7 +218,5 @@ jobs:
           repository: linux-training-group-1/asset-registry-config
           directory: './config'
           github_token: ${{ secrets.PERSONAL_COMMIT_TOKEN }}
-          message: Updating the docker image tag via CI; triggered by ${{ github.actor }}
+          message: Updating the docker image tag via CI triggered by ${{ github.actor }}
 
-# TODO: create a helm chart
-# TODO: fix the k8s deployment
