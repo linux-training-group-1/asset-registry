@@ -152,12 +152,13 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_SA_KEY }}
+      - name: Clear the staging namespace
+        run: kubectl --kubeconfig ${{ env.KUBECONFIG }} delete all --ignore-not-found=true -n staging --all  --grace-period=0 --force
       - name: Deploy to staging
         run: kubectl --kubeconfig ${{ env.KUBECONFIG }} apply -f final.yaml -n staging
       - name: Run tests
         run: echo "TODO Implement"
-      - name: Delete kubernetes componenets from cluster
-        run: kubectl --kubeconfig ${{ env.KUBECONFIG }} delete -f final.yaml -n staging
+
 
   build-and-push:
     name: Push to Production
