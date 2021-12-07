@@ -2,7 +2,7 @@ import bcrypt
 from flask.helpers import flash
 from flask_wtf.form import FlaskForm
 from asset_app import app
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from asset_app.models import Asset, load_user
 from asset_app.models import User
 from flask_login import login_user, logout_user, login_required, current_user
@@ -166,4 +166,18 @@ def logout_page():
 
 @app.route('/health', methods=['GET'])
 def health():
+    # Health probe for k8s
     return ''
+
+
+@app.route('/ready', methods=['GET'])
+def ready():
+    # Readiness probe for k8s
+    try:
+        db.session.execute('SELECT 1')
+        return '', 200
+    except Exception as e:
+        output = str(e)
+        return jsonify({"message": output}), 502
+
+
