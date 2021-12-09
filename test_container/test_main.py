@@ -1,3 +1,4 @@
+import os
 import time
 
 import dotenv
@@ -13,7 +14,7 @@ dotenv.load_dotenv()
 """
 This file contains the tests that run on the staging environment
 """
-host = "http://localhost:5000/"
+host = os.environ['STAGING_HOST']
 health_endpoint = "health"
 ready_endpoint = "ready"
 health_checks = 0
