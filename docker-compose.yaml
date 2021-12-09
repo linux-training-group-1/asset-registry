@@ -16,10 +16,6 @@ services:
       - mysql
   redis:
     image: redis:6-alpine3.14
-#    volumes:
-#      - ../resources/adapter/security:/home/wso2/security
-#    environment:
-#      - ADAPTER_PRIVATE_KEY_PATH=/home/wso2/security/keystore/mg.key
     ports:
       - "6379:6379"
   mysql:
@@ -30,11 +26,10 @@ services:
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
-#      - MYSQL_USER=asset-app
+      - MYSQL_USER=asset-app
+      - MYSQL_PASSWORD=akjgSDf#69
+      - MYSQL_DB=asset_db
     ports:
       - "3306:3306"
 volumes:
   mysql-per-volume:
-
-
-#todo add volumes and env variables
