@@ -21,6 +21,7 @@ Run tests:<br>
 Install MySQL and Redis if running locally<br>
 
 ## Run locally
+Used for while developing <br>
 Install requirements:<br>
 ```pip install -r requirements.txt```<br>
 Start the application:<br>
@@ -33,10 +34,11 @@ Start the docker image<br>
 ```docker run --env-file=.env -itp 5000:5000 asset-app```<br>
 
 ## Run the app + redis + mysql 
+Used to test the complete setup<br>
 Start the setup<br>
 ```docker-compose up```<br>
 <br>
-(First time only)<br>
+We need to create the table structure and insert data (First time only)<br>
 Login to mysql <br>
 ```mysql -h localhost -P 3306 --protocol=tcp -u root -p```<br>
 Create mysql database and tables <br>
