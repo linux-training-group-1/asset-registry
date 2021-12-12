@@ -118,9 +118,9 @@ jobs:
 
   test-staging:
     name: Test in staging env.
-#    needs:
-#      - test
-#      - scan
+    needs:
+      - test
+      - scan
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
