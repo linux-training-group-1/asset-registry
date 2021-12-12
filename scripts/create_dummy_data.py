@@ -1,8 +1,10 @@
 import itertools
+import random
+
 """
 Create dummy data for the asset application
 """
-asset_names = ["Cisco 3000", "Samsung 5000", "Asuz 7000", "Dialog 8000"]
+asset_names = ["Cisco ", "Samsung ", "Asuz ", "Dialog "]
 descriptions = ["2 integrated 10/100/1000 Ethernet ports",
                 "2 enhanced High-Speed WAN Interface Card slots that can host 2 single wide or 1 double wide and 1 "
                 "Single wide (e)HWIC",
@@ -21,10 +23,12 @@ locations = ["1st floor", "corner office", "2nd floor", "basement", "rooftop"]
 criticality = ['Critical', 'Medium', 'Low']
 
 string = "INSERT INTO asset_db.asset (name, owner, description, location, criticality) values "
-for combination in itertools.product(asset_names, owners, descriptions, locations, criticality):
-    # print(combination)
-    string += str(combination)+"," + "\n"
+for combination in itertools.product(owners, descriptions, locations, criticality):
+    new_ins = str(combination) + "," + "\n"
+    new_ins = new_ins[:1] + "'" + random.choice(asset_names) + str(int(random.random() * 1000000)) + "', " + new_ins[1:]
+    string += new_ins
 string = string[:-2]
 string += ";"
+# print(string)
 file = open("inserts.sql", "w")
 file.write(string)
