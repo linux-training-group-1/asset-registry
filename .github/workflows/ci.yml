@@ -191,8 +191,10 @@ jobs:
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql
       - name: Run the load test
         run: |
-          pip install -r load_test/requiremnets.txt
-          pytest load_test
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
+          pip install -r requirements.txt
+          python3 test_main.py $(kubectl get ingress | awk 'FNR == 2 {print $4}')
 
 
   build-and-push:
