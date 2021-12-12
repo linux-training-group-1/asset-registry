@@ -41,7 +41,7 @@ jobs:
           cat << EOF > .env
           MYSQL_HOST=localhost
           MYSQL_USER=asset-app
-          MYSQL_PASSWORD=akjgSDf#69
+          MYSQL_PASSWORD=password
           MYSQL_DB=asset_db
           MYSQL_PORT=3306
           REDIS_HOST=localhost
