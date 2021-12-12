@@ -7,7 +7,7 @@ on:
 env:
   PROJECT_ID: lt-2021-group-01
   GKE_CLUSTER: cluster-1    # Add your cluster name here.
-  GKE_ZONE: us-central1-c   # Add your cluster zone here.
+  GKE_LOCATION: us-central1-c   # Add your cluster zone here.
   STAGING_DEPLOYMENT_NAME: staging # Add your deployment name here.
 
 jobs:
@@ -151,7 +151,7 @@ jobs:
         uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
+          location: ${{ env.GKE_LOCATION }}
           credentials: ${{ secrets.GKE_SA_KEY }}
       - name: Clear the staging namespace
         run: kubectl --kubeconfig ${{ env.KUBECONFIG }} delete all --ignore-not-found=true -n default --all  --grace-period=0 --force
