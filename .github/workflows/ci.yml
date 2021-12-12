@@ -194,7 +194,8 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
           pip install -r requirements.txt
-          python3 test_main.py $(kubectl get ingress | awk 'FNR == 2 {print $4}')
+          kubectl get ingress | awk 'FNR == 2 {print $4}' >> .env
+          pytest test_main.py
 
 
   build-and-push:

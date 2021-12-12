@@ -15,7 +15,7 @@ dotenv.load_dotenv()
 """
 This file contains the tests that run on the staging environment
 """
-host = "http://"+sys.argv[1]
+host = "http://"+os.environ['STAGING_IP']
 health_endpoint = "/health"
 ready_endpoint = "/ready"
 health_checks = 0
@@ -84,4 +84,3 @@ def test_load(users=5, spawn_rate=10, time_s=6):
     assert env.stats.total.num_failures == 0
     assert env.stats.total.get_response_time_percentile(0.95) < 100
 
-test_load()
