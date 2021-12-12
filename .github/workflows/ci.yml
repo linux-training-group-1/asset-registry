@@ -173,8 +173,16 @@ jobs:
         run: kubectl --kubeconfig ${{ env.KUBECONFIG }} delete all --ignore-not-found=true -n default --all  --grace-period=0 --force
       - name: Deploy to staging
         run: kubectl --kubeconfig ${{ env.KUBECONFIG }} apply -f final.yaml -n default
-      - name: Run a load test
-        run: echo "TODO Implement"
+      - name: Wait till the k8s becomes ready
+        run: sleep 60
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Run the load test
+        run: |
+          pip install -r load_test/requiremnets.txt
+          pytest load_test
 
 
   build-and-push:

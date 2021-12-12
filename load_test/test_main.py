@@ -14,7 +14,7 @@ dotenv.load_dotenv()
 """
 This file contains the tests that run on the staging environment
 """
-host = os.environ['STAGING_HOST']
+host = os.environ['STAGING_IP']
 health_endpoint = "health"
 ready_endpoint = "ready"
 health_checks = 0
