@@ -18,7 +18,7 @@ create table user
     username varchar(128) not null unique,
     pwd      varchar(128) not null
 );
-insert into asset_db.`user` (user_id, username, pwd) VALUES (1,'admin','$2a$12$9AXmYWNIHyPd/5HWytBVu.bq3oQ7yy5arXF2Pqf3Q7UGbQJrxzfrS')
+insert into asset_db.`user` (user_id, username, pwd) VALUES (1,'admin','$2a$12$9AXmYWNIHyPd/5HWytBVu.bq3oQ7yy5arXF2Pqf3Q7UGbQJrxzfrS');
 -- user name is admin, password is password
 
 -- database user creation
