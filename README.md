@@ -14,7 +14,7 @@ MYSQL_PORT=3306
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_DB=0
-SECRET_KEY=bff4eb94deb028b293786461
+SECRET_KEY=bff4eb94deb028b293786461 
 ```
 Run tests:<br>
 ```pytest --verbose --failed-first```<br>
