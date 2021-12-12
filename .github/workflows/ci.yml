@@ -147,6 +147,7 @@ jobs:
           service_account_key: ${{ secrets.GKE_SA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
       - name: Get the GKE credentials
+#        This fetches the kubeconfig and put the kubeconfig file path to .env
         uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
