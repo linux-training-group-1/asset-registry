@@ -193,7 +193,7 @@ jobs:
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
-          pip install -r requirements.txt
+          pip install -r requirements.txt -q
           echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
           cat $GITHUB_ENV
           pytest test_main.py
