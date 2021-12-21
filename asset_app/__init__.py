@@ -14,10 +14,11 @@ load_dotenv()
 app = Flask(__name__)
 
 # redis config
-redis_client = redis.Redis(host=os.environ['REDIS_HOST'],port=os.environ['REDIS_PORT'])
+redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=int(os.environ['REDIS_PORT']))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + os.environ['MYSQL_USER'] + ":" + os.environ[
-    'MYSQL_PASSWORD'] + "@" + os.environ['MYSQL_HOST'] + ":" + os.environ['MYSQL_PORT'] + "/" + os.environ['MYSQL_DATABASE']
+    'MYSQL_PASSWORD'] + "@" + os.environ['MYSQL_HOST'] + ":" + os.environ['MYSQL_PORT'] + "/" + os.environ[
+                                            'MYSQL_DATABASE']
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
