@@ -235,6 +235,12 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.DOCKER_IMAGE_TAG }}
+          name: Release ${{ env.DOCKER_IMAGE_TAG }}
+          body: Automated Release by GitHub Actions
       - name: Checkout the app config repo
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1
