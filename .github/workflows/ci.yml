@@ -267,6 +267,7 @@ jobs:
           message: Updating the docker image tag via CI triggered by ${{ github.actor }}
   notify:
     name: Notify on Slack
+    needs: build-and-push
     runs-on: ubuntu-20.04
     if: always() # set always
     steps:
@@ -277,4 +278,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#        if: env.WORKFLOW_CONCLUSION == 'failure' # notify only if failure
+        if: env.WORKFLOW_CONCLUSION == 'custom' # notify only if failure
