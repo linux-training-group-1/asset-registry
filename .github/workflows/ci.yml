@@ -76,6 +76,9 @@ jobs:
           DISPLAY: :99
       - name: Kill the docker compose
         run: docker-compose kill
+      - name: cancel workflow
+        if: failure()
+        uses: andymckay/cancel-action@0.2
 
   scan:
     name: Scan for image vulnerabilties
