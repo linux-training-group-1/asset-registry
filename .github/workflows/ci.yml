@@ -265,4 +265,16 @@ jobs:
           directory: './config'
           github_token: ${{ secrets.PERSONAL_COMMIT_TOKEN }}
           message: Updating the docker image tag via CI triggered by ${{ github.actor }}
-
+  notify:
+    name: Notify on Slack
+    runs-on: ubuntu-20.04
+    if: always() # set always
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v2
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ env.WORKFLOW_CONCLUSION }} # neutral, success, skipped, cancelled, timed_out, action_required, failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#        if: env.WORKFLOW_CONCLUSION == 'failure' # notify only if failure
