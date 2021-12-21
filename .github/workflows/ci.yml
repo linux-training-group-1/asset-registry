@@ -54,7 +54,7 @@ jobs:
           MYSQL_HOST=localhost
           MYSQL_USER=asset-app
           MYSQL_PASSWORD=password
-          MYSQL_DB=asset_db
+          MYSQL_DATABASE=asset_db
           MYSQL_PORT=3306
           REDIS_HOST=localhost
           REDIS_PORT=6379

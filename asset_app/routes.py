@@ -9,6 +9,11 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from asset_app.forms import AddAssetForm, EditAssetForm, LoginForm, SearchAssetForm
 from asset_app import db
+from asset_app import redis_client
+import json 
+from datetime import timedelta
+
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -48,19 +53,75 @@ def dashboard():
 @login_required
 def search():
     form = SearchAssetForm()
+    
+    #set the expiration time on redis cache for entry
+    cache_expire_in_seconds=3600
 
     if form.validate_on_submit():
         search_query = form.search_query.data
+
         if form.search_type.data == 'id':
-            search_result = Asset.query.filter(
-                Asset.asset_id == search_query).all()
+           
+            redis_result=redis_client.get(f':{search_query}')
+  
+            if redis_result:
+                print('bloody hit')
+                print(f'search result from redis:{redis_result}')
+                search_result=json.loads(redis_result)
+
+            else:
+                print('bloody miss(id)')
+                search_result = Asset.query.filter(Asset.asset_id == search_query).all()
+
+                mysql_result_to_json=[]
+                for asset in search_result:
+                    item={
+                        'asset_id':asset.asset_id,
+                                'name':asset.name,
+                                'owner':asset.owner,
+                                'description':asset.description,
+                                'location':asset.location,
+                                'criticality':asset.criticality
+                    }
+                    
+                    mysql_result_to_json.append(item)
+                
+                redis_client.set(f':{search_query}',json.dumps(mysql_result_to_json))
+                redis_client.expire(f':{search_query}',timedelta(seconds=cache_expire_in_seconds))
+
 
         if form.search_type.data == 'name':
-            search = "%{}%".format(search_query)
-            search_result = Asset.query.filter(Asset.name.like(search)).all()
+            
+            redis_result=redis_client.get(f'{search_query}:')
+     
+            if redis_result:
+                search_result=json.loads(redis_result)
+                print('bloody hit')
+                print(f'search result from redis:{redis_result}')
+
+            else:
+                print('bloody miss(name)')
+                search = "%{}%".format(search_query)
+                search_result = Asset.query.filter(Asset.name.like(search)).all()
+                
+                mysql_result_to_json=[]
+                for asset in search_result:
+                    item={
+                        'asset_id':asset.asset_id,
+                                'name':asset.name,
+                                'owner':asset.owner,
+                                'description':asset.description,
+                                'location':asset.location,
+                                'criticality':asset.criticality
+                    }
+                    
+                    mysql_result_to_json.append(item)
+                
+                redis_client.set(f'{search_query}:',json.dumps(mysql_result_to_json))
+                redis_client.expire(f'{search_query}:',timedelta(seconds=cache_expire_in_seconds)) 
 
         if search_result:
-            print('in search_results loop')
+         
             return render_template('search.html', form=form, search_result=search_result)
 
         else:
