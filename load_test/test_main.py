@@ -1,21 +1,18 @@
 import os
-import sys
 import time
 
-import dotenv
-import requests
 import gevent
+import requests
 from locust import HttpUser, task, between
 from locust.env import Environment
-from locust.stats import stats_printer, stats_history
 from locust.log import setup_logging
+from locust.stats import stats_printer, stats_history
 
 setup_logging("INFO", None)
-dotenv.load_dotenv()
 """
 This file contains the tests that run on the staging environment
 """
-host = "http://"+os.environ['STAGING_IP']
+host = "http://" + os.environ['STAGING_IP']
 health_endpoint = "/health"
 ready_endpoint = "/ready"
 health_checks = 0
@@ -55,7 +52,7 @@ class User(HttpUser):
 
     @task
     def task_404(self):
-        self.client.get(host+"non-existing-path")
+        self.client.get(host + "non-existing-path")
 
 
 def test_load(users=5, spawn_rate=10, time_s=6):
@@ -83,4 +80,3 @@ def test_load(users=5, spawn_rate=10, time_s=6):
     assert env.stats.total.avg_response_time < 60
     assert env.stats.total.num_failures == 0
     assert env.stats.total.get_response_time_percentile(0.95) < 100
-
