@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       - name: Install the MySQL client
-        run: sudo apt-get install mysql-client
+        run: sudo apt-get -f install mysql-client
       - name: Create a .env file
         run: |
           cat << EOF > .env
@@ -183,7 +183,7 @@ jobs:
         with:
           python-version: "3.10"
       - name: Install the MySQL client
-        run: sudo apt-get install mysql-client
+        run: sudo apt-get -f install mysql-client
       - name: Port forward mysql
         run: kubectl port-forward svc/mysql-service  3306:3306 &
       - name: Create tables and add data to mysql
