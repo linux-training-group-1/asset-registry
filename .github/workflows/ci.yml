@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       - name: Install the MySQL client
-        run: sudo apt-get update & sudo apt-get -f install mysql-client-8.0 mysql-client
+        run: sudo apt-get update & sudo apt-get -f install mysqlsh
       - name: Create a .env file
         run: |
           cat << EOF > .env
