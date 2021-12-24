@@ -1,2 +1,0 @@
-# The CI/CD pipeline
-
