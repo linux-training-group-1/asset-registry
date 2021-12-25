@@ -56,6 +56,7 @@ jobs:
       - name: Add mysql tables and data
         run: |
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/table.sql || true
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/inserts.sql
       - name: Test with pytest
         run: |
           pytest tests --verbose --failed-first
