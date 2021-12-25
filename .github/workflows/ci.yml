@@ -11,21 +11,9 @@ env:
   STAGING_DEPLOYMENT_NAME: staging # Add your deployment name here.
 
 jobs:
-  pre-ci:
-    name: Wait till the prevoius CI finishes.
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          abort-after-seconds: 600
   test:
     name: Unit and Integration Tests
     runs-on: ubuntu-20.04
-    needs:
-      - pre-ci
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -83,8 +71,6 @@ jobs:
   scan:
     name: Scan for image vulnerabilties
     runs-on: ubuntu-20.04
-    needs:
-      - pre-ci
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -121,8 +107,6 @@ jobs:
   analyze:
     name: Code Quality Scanning
     runs-on: ubuntu-latest
-    needs:
-      - pre-ci
     permissions:
       actions: read
       contents: read
@@ -140,12 +124,23 @@ jobs:
           languages: ${{ matrix.language }}
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
-
+  pre-ci:
+    name: Wait till the prevoius CI finishes.
+    needs:
+      - scan
+      - test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Turnstyle
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          abort-after-seconds: 600
   test-staging:
     name: Test in staging env.
     needs:
-      - test
-      - scan
+      - pre-ci
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
