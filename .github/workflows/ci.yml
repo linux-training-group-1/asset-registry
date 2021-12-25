@@ -66,13 +66,9 @@ jobs:
       - name: Save docekr compose logs to a file
         if: failure()
         run: docker-compose logs --no-color >& logs.txt
-      - name: Archieve docker logs
+      - name: Print the container logs
         if: failure()
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist-without-markdown
-          path: |
-            logs.txt
+        run: cat logs.txt
       - name: Kill the docker compose
         run: docker-compose kill
       - name: cancel workflow
