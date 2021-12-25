@@ -40,7 +40,7 @@ jobs:
         run: |
           cat << EOF > .env
           MYSQL_HOST=mysql
-          MYSQL_USER=asset-app
+          MYSQL_USER=root
           MYSQL_PASSWORD=password
           MYSQL_DATABASE=asset_db
           MYSQL_PORT=3306
