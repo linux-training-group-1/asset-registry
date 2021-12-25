@@ -65,7 +65,9 @@ jobs:
           DISPLAY: :99
       - name: Save docekr compose logs to a file
         if: failure()
-        run: docker-compose logs --no-color >& logs.txt
+        run: |
+          echo "show databases;" | mysql -h localhost -P 3306 --protocol=tcp -u root --password=password
+          docker-compose logs --no-color >& logs.txt
       - name: Print the container logs
         if: failure()
         run: cat logs.txt
