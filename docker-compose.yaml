@@ -27,7 +27,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=asset-app
-      - MYSQL_PASSWORD=akjgSDf#69
+      - MYSQL_PASSWORD=password
       - MYSQL_DB=asset_db
     ports:
       - "3306:3306"
