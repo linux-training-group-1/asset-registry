@@ -1,3 +1,4 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome import service
 from selenium.webdriver.common.by import By
@@ -5,7 +6,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-base_url = 'http://127.0.0.1:5000/'
+base_url = os.getenv('STAGING_IP',default='127.0.0.1:5000/')
+base_url = "http://" + base_url
 username = 'admin'
 password = 'password'
 service = Service(ChromeDriverManager().install())
