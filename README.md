@@ -1,4 +1,7 @@
-# Asset Registry
+# The CICD pipeline
+![cicd-full](https://user-images.githubusercontent.com/32504465/147909276-979042a5-d575-4414-8e6e-20fb663f3960.png)
+
+# Asset Registry Application
 [![CI Pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml)
 
