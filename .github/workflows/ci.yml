@@ -198,10 +198,10 @@ jobs:
         run: kubectl port-forward svc/mysql-service  3306:3306 &
       - name: Create tables and add data to mysql
         run: |
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/table.sql
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/table.sql 
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/inserts.sql
-          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql
-          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql }} true
       - name: Run the load test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
