@@ -13,6 +13,6 @@ USER assetuser
 
 EXPOSE $PORT
 ENTRYPOINT ["gunicorn"]
-CMD ["asset_app:app","-b",":5000","--workers","4","--log-level","debug"]
+CMD ["asset_app:app","-b",":5000","--workers","4","--log-level","debug","--worker-class","gevent"]
 
 HEALTHCHECK --interval=5m --timeout=3s CMD wget --no-verbose  --spider http://localhost:5000/health || exit 1
