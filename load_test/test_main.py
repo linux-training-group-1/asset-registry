@@ -7,7 +7,8 @@ from locust import HttpUser, task, between
 from locust.env import Environment
 from locust.log import setup_logging
 from locust.stats import stats_printer, stats_history
-
+from dotenv import load_dotenv
+load_dotenv()
 setup_logging("INFO", None)
 """
 This file contains the tests that run on the staging environment
