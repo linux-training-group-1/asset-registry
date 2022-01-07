@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 
 import gevent
@@ -7,13 +8,16 @@ from locust import HttpUser, task, between
 from locust.env import Environment
 from locust.log import setup_logging
 from locust.stats import stats_printer, stats_history
-from dotenv import load_dotenv
-load_dotenv()
+
 setup_logging("INFO", None)
 """
 This file contains the tests that run on the staging environment
 """
-host = "http://" + os.environ['STAGING_IP']
+if len(sys.argv) >= 2:
+    staging_ip = sys.argv[1]
+else:
+    staging_ip = "localhost"
+host = "http://" + staging_ip
 health_endpoint = "/health"
 ready_endpoint = "/ready"
 health_checks = 0
