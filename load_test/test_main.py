@@ -13,11 +13,8 @@ setup_logging("INFO", None)
 """
 This file contains the tests that run on the staging environment
 """
-if len(sys.argv) >= 2:
-    staging_ip = sys.argv[1]
-else:
-    staging_ip = "localhost"
-host = "http://" + staging_ip
+
+host = "http://" + os.getenv("STAGING_IP", "localhost:5000")
 health_endpoint = "/health"
 ready_endpoint = "/ready"
 health_checks = 0
@@ -29,11 +26,16 @@ def check_health():
     global health_checks
     while health_checks < checks_max:
         health_checks += 1
-        resp = requests.get(host + health_endpoint)
+        url = host + health_endpoint
+        print(url)
+        resp = requests.get(url)
         if resp.status_code == 200:
             return True
         time.sleep(1)
     return False
+
+
+check_health()
 
 
 def check_ready():
@@ -59,29 +61,28 @@ class User(HttpUser):
     def task_404(self):
         self.client.get(host + "non-existing-path")
 
-
-def test_load(users=5, spawn_rate=10, time_s=6):
-    assert check_health()
-    assert check_ready()
-    # setup Environment and Runner
-    env = Environment(user_classes=[User])
-    env.create_local_runner()
-
-    # start a greenlet that periodically outputs the current stats
-    gevent.spawn(stats_printer(env.stats))
-
-    # start a greenlet that save current stats to history
-    gevent.spawn(stats_history, env.runner)
-
-    # start the test
-    env.runner.start(users, spawn_rate=spawn_rate)
-
-    # in 60 seconds stop the runner
-    gevent.spawn_later(time_s, lambda: env.runner.quit())
+    # def test_load(users=5, spawn_rate=10, time_s=6):
+    #     assert check_health()
+    #     assert check_ready()
+    #     # setup Environment and Runner
+    #     env = Environment(user_classes=[User])
+    #     env.create_local_runner()
+    #
+    #     # start a greenlet that periodically outputs the current stats
+    #     gevent.spawn(stats_printer(env.stats))
+    #
+    #     # start a greenlet that save current stats to history
+    #     gevent.spawn(stats_history, env.runner)
+    #
+    #     # start the test
+    #     env.runner.start(users, spawn_rate=spawn_rate)
+    #
+    #     # in 60 seconds stop the runner
+    #     gevent.spawn_later(time_s, lambda: env.runner.quit())
 
     # wait for the greenlets
-    env.runner.greenlet.join()
-
-    assert env.stats.total.avg_response_time < 60
-    assert env.stats.total.num_failures == 0
-    assert env.stats.total.get_response_time_percentile(0.95) < 100
+    # env.runner.greenlet.join()
+    #
+    # assert env.stats.total.avg_response_time < 60
+    # assert env.stats.total.num_failures == 0
+    # assert env.stats.total.get_response_time_percentile(0.95) < 100

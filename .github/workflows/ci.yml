@@ -209,7 +209,7 @@ jobs:
           pip install -r requirements.txt -q
           echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
           cat $GITHUB_ENV
-          pytest test_main.py ${{ env.STAGING_IP }}
+          STAGING_IP=${{ env.STAGING_IP }} pytest test_main.py 
 
 
   build-and-push:
