@@ -202,14 +202,16 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/inserts.sql
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql || true
-      - name: Run the load test
-        run: |
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
-          pip install -r requirements.txt -q
-          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
-          cat $GITHUB_ENV
-          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py 
+#      - name: Run the load test
+#        run: |
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
+#          pip install -r requirements.txt -q
+#          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+#          cat $GITHUB_ENV
+#          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py
+      - name: Test connectivity
+        run: curl ${{ env.STAGING_IP }} -v
 
 
   build-and-push:
