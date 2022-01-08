@@ -242,7 +242,7 @@ jobs:
       - name: Get new Docker image tag
         run: COMMIT_MSG="${{ github.event.head_commit.message }}" python3 utils/docker_tag.py asset-app ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASS }}
       - name: Split the version from the tag
-        run: printf 'THIS_VAR=%q\n' "${ ${{ env.DOCKER_IMAGE_TAG }}#*:}" >> $GITHUB_ENV
+        run: printf 'VERSION=%q\n' "${${{ env.DOCKER_IMAGE_TAG }}#*:}" >> $GITHUB_ENV
       - name: Print env var
         run: cat $GITHUB_ENV
       - name: Build and push
@@ -255,8 +255,8 @@ jobs:
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ env.DOCKER_IMAGE_TAG }}
-          name: Release ${{ env.DOCKER_IMAGE_TAG }}
+          tag: ${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
           body: Automated Release by GitHub Actions
       - name: Checkout the app config repo
         uses: actions/checkout@v2
