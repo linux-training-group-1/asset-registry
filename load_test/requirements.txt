@@ -2,3 +2,4 @@ pytest
 python-dotenv
 requests
 locust
+gevent
