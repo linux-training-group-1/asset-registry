@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-base_url = os.getenv('STAGING_IP',default='127.0.0.1:5000/')
+base_url = os.getenv('STAGING_IP', default='127.0.0.1:5000/')
 base_url = "http://" + base_url
 username = 'admin'
 password = 'password'
@@ -64,12 +64,15 @@ class TestAddAssets:
         assert (base_url + "add-asset") in driver.current_url
         driver.find_element(By.NAME, 'assetName').send_keys('Mobile Phone')
         driver.find_element(By.NAME, 'assetOwner').send_keys('John Doe')
-        driver.find_element(By.NAME, 'assetDescription').send_keys('Just a Mobile Phone')
+        driver.find_element(By.NAME, 'assetDescription').send_keys(
+            'Just a Mobile Phone')
         driver.find_element(By.NAME, 'assetLocation').send_keys('Warehouse')
-        Select(driver.find_element(By.NAME, 'assetCriticality')).select_by_value('medium')
+        Select(driver.find_element(By.NAME, 'assetCriticality')
+               ).select_by_value('medium')
         driver.find_element(By.NAME, 'submit').click()
         assert (base_url + "list-assets") in driver.current_url
-        assert "Mobile Phone", "John Doe" in driver.find_element(By.ID, "list-assets-page")
+        assert "Mobile Phone", "John Doe" in driver.find_element(
+            By.ID, "list-assets-page")
         driver.quit()
 
 
@@ -96,5 +99,6 @@ class TestEditAssets:
         items.pop().click()
         driver.find_element(By.NAME, 'submit_delete').click()
         assert (base_url + "list-assets") in driver.current_url
-        assert (total_assets - 1) == len(driver.find_elements(By.ID, "edit-asset-btn"))
+        assert (total_assets -
+                1) == len(driver.find_elements(By.ID, "edit-asset-btn"))
         driver.quit()
