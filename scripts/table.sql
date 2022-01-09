@@ -22,7 +22,7 @@ insert into asset_db.`user` (user_id, username, pwd) VALUES (1,'admin','$2a$12$9
 -- user name is admin, password is password
 
 -- database user creation
-create user 'asset-app'@'%' identified by 'password';
+-- create user 'asset-app'@'%' identified by 'password';
 -- mitigate the mysql bug https://stackoverflow.com/questions/5555328/error-1396-hy000-operation-create-user-failed-for-jacklocalhost
 DROP user 'asset-app'@'%';
 flush privileges ;

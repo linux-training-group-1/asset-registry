@@ -99,6 +99,5 @@ class TestEditAssets:
         items.pop().click()
         driver.find_element(By.NAME, 'submit_delete').click()
         assert (base_url + "list-assets") in driver.current_url
-        assert (total_assets -
-                1) == len(driver.find_elements(By.ID, "edit-asset-btn"))
+        assert (total_assets - 1) == len(driver.find_elements(By.ID, "edit-asset-btn"))
         driver.quit()
