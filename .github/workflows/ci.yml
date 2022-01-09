@@ -29,11 +29,11 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip3 install -r requirements-dev.txt
-      - name: Setup Chrome webdriver
-        uses: nanasess/setup-chromedriver@master
-      - name: Setup Chrome Display
-        run: |
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
+#      - name: Setup Chrome webdriver
+#        uses: nanasess/setup-chromedriver@master
+#      - name: Setup Chrome Display
+#        run: |
+#          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       #       - name: Install the MySQL client
       #         run: sudo apt-get update & sudo apt-get upgrade & sudo apt-get -f install mysql-client -y
       - name: Create a .env file
@@ -62,8 +62,8 @@ jobs:
           pip3 install -r requirements.txt
           pytest tests/test_routes.py --verbose --failed-first
           ls -la
-        env:
-          DISPLAY: :99
+#        env:
+#          DISPLAY: :99
       - name: Save docker compose logs to a file
         if: failure()
         run: |
@@ -203,6 +203,11 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/inserts.sql
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql || true
+      - name: Setup Chrome webdriver
+        uses: nanasess/setup-chromedriver@master
+      - name: Setup Chrome Display
+        run: |
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
       - name: Run E2E Test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
@@ -211,6 +216,8 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
           pip install -r requirements-dev.txt -q
           pytest test_app.py --verbose --failed-first
+        env:
+          DISPLAY: :99
       - name: Run the load test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
