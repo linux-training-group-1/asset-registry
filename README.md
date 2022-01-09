@@ -1,6 +1,7 @@
 # The CI/CD pipeline
+![cicd-full](https://user-images.githubusercontent.com/32504465/148670595-9b51da6d-4ffa-4e2e-9aae-37377f90ac47.png)
 
-![cicd-full](https://user-images.githubusercontent.com/32504465/147909555-d5d7b583-c333-4ff8-9c6c-9c949e51feb0.png)
+
 
 # Asset Registry Application
 [![CI Pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
