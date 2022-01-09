@@ -204,11 +204,12 @@ jobs:
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql || true
       - name: Run E2E Test
-      # TODO: Need to run the E2E test on Staging Environment
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
           echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
           cat $GITHUB_ENV
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
+          pip install -r requirements-dev.txt -q
           pytest test_app.py --verbose --failed-first
       - name: Run the load test
         run: |
