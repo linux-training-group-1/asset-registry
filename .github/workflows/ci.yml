@@ -59,11 +59,12 @@ jobs:
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/inserts.sql
       - name: Test with pytest
         run: |
-          pytest tests --verbose --failed-first
+          pip3 install -r requirements.txt
+          pytest tests/test_routes.py --verbose --failed-first
           ls -la
         env:
           DISPLAY: :99
-      - name: Save docekr compose logs to a file
+      - name: Save docker compose logs to a file
         if: failure()
         run: |
           echo "show databases;" | mysql -h localhost -P 3306 --protocol=tcp -u root --password=password
@@ -202,6 +203,13 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/inserts.sql
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
           mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql || true
+      - name: Run E2E Test
+      # TODO: Need to run the E2E test on Staging Environment
+        run: |
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
+          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+          cat $GITHUB_ENV
+          pytest test_app.py --verbose --failed-first
       - name: Run the load test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
