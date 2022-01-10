@@ -215,7 +215,7 @@ jobs:
           cat $GITHUB_ENV
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
           pip install -r requirements-dev.txt -q
-          pytest test_app.py --verbose --failed-first
+          STAGING_IP=${{ env.STAGING_IP }} pytest test_app.py --verbose --failed-first
         env:
           DISPLAY: :99
 #      - name: Run the load test
