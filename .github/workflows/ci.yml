@@ -227,8 +227,6 @@ jobs:
 #          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
 #          cat $GITHUB_ENV
 ##          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py
-      - name: Test connectivity
-        run: curl ${{ env.STAGING_IP }} -v
 
 
   build-and-push:
