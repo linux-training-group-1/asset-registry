@@ -207,7 +207,7 @@ jobs:
         uses: nanasess/setup-chromedriver@master
       - name: Setup Chrome Display
         run: |
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
       - name: Run E2E Test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
@@ -218,14 +218,14 @@ jobs:
           pytest test_app.py --verbose --failed-first
         env:
           DISPLAY: :99
-      - name: Run the load test
-        run: |
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
-          pip install -r requirements.txt -q
-          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
-          cat $GITHUB_ENV
-#          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py
+#      - name: Run the load test
+#        run: |
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
+#          pip install -r requirements.txt -q
+#          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+#          cat $GITHUB_ENV
+##          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py
       - name: Test connectivity
         run: curl ${{ env.STAGING_IP }} -v
 
