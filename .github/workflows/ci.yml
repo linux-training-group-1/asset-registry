@@ -211,14 +211,14 @@ jobs:
       - name: Run E2E Test
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
-#          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
-#          cat $GITHUB_ENV
-#          echo ${{ env.STAGING_IP }}
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
           pip install -r requirements-dev.txt -q
           STAGING_IP=`kubectl get ingress | awk 'FNR == 2 {print $4}'` pytest test_app.py --verbose --failed-first
         env:
           DISPLAY: :99
+          #          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+          #          cat $GITHUB_ENV
+          #          echo ${{ env.STAGING_IP }}
 #      - name: Run the load test
 #        run: |
 #          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
