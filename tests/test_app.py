@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 base_url = os.getenv('STAGING_IP', default='localhost:5000')
-base_url = "http://" + base_url+"/"
+base_url = "http://" + base_url + "/"
 username = 'admin'
 password = 'password'
 service = Service(ChromeDriverManager().install())
