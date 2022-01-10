@@ -213,6 +213,7 @@ jobs:
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
           echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
           cat $GITHUB_ENV
+          echo ${{ env.STAGING_IP }}
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
           pip install -r requirements-dev.txt -q
           STAGING_IP=${{ env.STAGING_IP }} pytest test_app.py --verbose --failed-first
