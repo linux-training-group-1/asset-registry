@@ -5,7 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+from dotenv import load_dotenv
+load_dotenv()
 base_url = os.getenv('STAGING_IP', default='localhost:5000')
 print("BASE URL: ", base_url)
 base_url = "http://" + base_url + "/"
@@ -15,6 +16,7 @@ service = Service(ChromeDriverManager().install())
 
 
 def admin_login(driver):
+    print("BASE URL: ", base_url)
     driver.get(base_url)
     driver.find_element(By.NAME, 'username').send_keys(username)
     driver.find_element(By.NAME, 'password').send_keys(password)
@@ -23,6 +25,7 @@ def admin_login(driver):
 
 class TestLogin:
     def test_login_success(self):
+        print("BASE URL: ", base_url)
         driver = webdriver.Chrome(service=service)
         admin_login(driver)
         assert (base_url + "dashboard") in driver.current_url
