@@ -7,7 +7,7 @@
 
 # Asset Registry Application
 ## Developer Guide
-
+Create a virtual environment and activate it.
 Install the dependencies:<br>
 ```pip install -r requirements.txt -r requirements-dev.txt```<br>
 Create a `.env` file on the project root. Add the following:
