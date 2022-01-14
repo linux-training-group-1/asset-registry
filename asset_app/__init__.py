@@ -28,7 +28,7 @@ db = SQLAlchemy(app)
 
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_POOL_RECYCLE']=30
+app.config['SQLALCHEMY_POOL_RECYCLE']=30
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
