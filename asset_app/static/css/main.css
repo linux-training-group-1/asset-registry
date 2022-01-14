@@ -15,6 +15,7 @@ html {
     --max-width: 600px;
     --transition: 0.3s ease-in-out all;
 }
+
 *,
 ::before,
 ::after {
@@ -22,6 +23,7 @@ html {
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     background: var(--backgroundColor);
     font-family: var(--bodyFont);
@@ -137,6 +139,7 @@ ul {
     color: var(--green-dark);
     background: var(--green-light);
 }
+
 .form {
     width: 90vw;
     max-width: var(--max-width);
@@ -146,6 +149,7 @@ ul {
     padding: 2rem 2.5rem;
     margin: 3rem auto;
 }
+
 .form-label {
     display: block;
     font-size: var(--smallText);
@@ -170,6 +174,7 @@ ul {
 .form-textarea {
     height: 7rem;
 }
+
 ::placeholder {
     font-family: inherit;
     color: hsl(215, 20%, 65%);
@@ -248,6 +253,7 @@ table th {
     height: 100vh;
     max-height: 100vh;
 }
+
 .login-container h2 {
     color: var(--black);
     text-align: center;
@@ -257,10 +263,12 @@ table th {
 .login-container form {
     box-shadow: unset;
 }
+
 .login-container form label {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 .login-container form input {
     font-size: 1.2rem;
 }
@@ -290,6 +298,7 @@ table th {
     background-color: var(--backgroundColor);
     border: 1px solid hsl(214, 32%, 91%);
 }
+
 /* ================================================================= */
 /* list page */
 
@@ -530,6 +539,7 @@ span.close-btn {
     padding: 5% 5%;
     max-height: 100vh;
 }
+
 .dashboard-container {
     min-height: 100vh;
     background-color: var(--backgroundColor);
@@ -582,6 +592,7 @@ span.close-btn {
         padding: 1rem 10px 3rem 10px;
         height: 100%;
     }
+
     .app-logo {
         margin-top: 0;
         margin-bottom: 2em;
@@ -668,6 +679,7 @@ span.close-btn {
     border: unset;
     box-shadow: unset;
 }
+
 .user-menu-dropdown {
     display: flex;
     flex-direction: column;
@@ -693,6 +705,7 @@ span.close-btn {
     padding-top: 2rem;
     padding-bottom: 2.5rem;
 }
+
 .show-user-menu-dropdown a {
     color: black;
 }
