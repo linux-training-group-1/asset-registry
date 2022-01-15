@@ -12,7 +12,6 @@ from asset_app import db
 from asset_app import redis_client
 import json 
 from datetime import timedelta
-from redis.exceptions import ConnectionError
 
 
 
@@ -67,12 +66,12 @@ def search():
         
        
             if redis_result:
-                print('redis hit(id): {search_query}')
+                print(f'redis hit(id): {search_query}')
                 print(f'search result from redis:{redis_result}')
                 search_result=json.loads(redis_result)
 
             else:
-                print('redis miss(id): {search_query}')
+                print(f'redis miss(id): {search_query}')
                 search_result = Asset.query.filter(Asset.asset_id == search_query).all()
 
                 mysql_result_to_json=[]
@@ -98,11 +97,11 @@ def search():
      
             if redis_result:
                 search_result=json.loads(redis_result)
-                print('redis hit(name):{search_query}')
+                print(f'redis hit(name):{search_query}')
                 print(f'search result from redis:{redis_result}')
 
             else:
-                print('redis miss(name):{search_query}')
+                print(f'redis miss(name):{search_query}')
                 search = "%{}%".format(search_query)
                 search_result = Asset.query.filter(Asset.name.like(search)).all()
                 
