@@ -8,8 +8,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 import redis
 
-# logging.config.fileConfig('logging.conf')
-# logger = logging.getLogger('app')
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('app')
 load_dotenv()
 app = Flask(__name__)
 
