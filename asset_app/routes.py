@@ -1,4 +1,8 @@
 import logging
+import logging.config
+import os
+
+import psutil
 
 from asset_app import app
 from flask import render_template, redirect, url_for, flash, request, jsonify
@@ -11,6 +15,9 @@ from asset_app import db
 from asset_app import redis_client
 import json
 from datetime import timedelta
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('app')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -31,8 +38,10 @@ def home_page():
 
                 login_user(attempted_user)
                 flash(f'you logged in successfully!', category='success')
+                logger.debug("username " + str(form.username.data) + " Logged in successfully")
                 return redirect(url_for('dashboard'))
             else:
+                logger.debug("username " + str(form.username.data) + " Logging unsuccessful")
                 flash(f'Incorrect username or password ', category='error')
 
         return render_template('login.html', form=form)
@@ -62,12 +71,10 @@ def search():
             redis_result = redis_client.get(f':{search_query}')
 
             if redis_result:
-                print('bloody hit')
-                print(f'search result from redis:{redis_result}')
+                logger.debug(f'search result from redis:{redis_result}')
                 search_result = json.loads(redis_result)
 
             else:
-                print('bloody miss(id)')
                 search_result = Asset.query.filter(Asset.asset_id == search_query).all()
 
                 mysql_result_to_json = []
@@ -119,6 +126,7 @@ def search():
             return render_template('search.html', form=form, search_result=search_result)
 
         else:
+            logger.debug("No result found for " + str(search_query))
             return render_template('search.html', form=form, nohit='empty')
 
     return render_template('search.html', form=form)
@@ -140,6 +148,7 @@ def add_asset():
         )
         db.session.add(assetToAdd)
         db.session.commit()
+        logger.debug("Asset added successfully: " + str(form.assetName.data))
         flash(f'Asset added successfully', category='success')
         return redirect(url_for('list_assets'))
 
@@ -177,18 +186,20 @@ def edit_asset():
             asset.location = form.assetLocation.data
             asset.criticality = form.assetCriticality.data
             db.session.commit()
+            logger.debug("Asset updated successful: " + str(form.assetName.data))
             flash(f'Asset added successfully', category='success')
             return redirect(url_for('list_assets'))
 
         if delete:
             db.session.delete(asset)
             db.session.commit()
+            logger.debug("Asset deleted successful: " + str(form.assetName.data))
             flash(f'Asset deleted successfully', category='success')
             return redirect(url_for('list_assets'))
 
     elif form.errors != {}:
         for err_msg in form.errors.values():
-            print('validation errors')
+            logger.debug('validation errors ')
             flash(f'{err_msg}', category='error')
 
     # if ((request.referrer == request.url_root+url_for("list_assets")[1:]) or (request.referrer ==
@@ -216,6 +227,7 @@ def edit_asset():
 @login_required
 def logout_page():
     logout_user()
+    logger.debug("User logged out")
     flash("You have been logged out", category='info')
     return redirect(url_for('home_page'))
 
@@ -234,4 +246,5 @@ def ready():
         return '', 200
     except Exception as e:
         output = str(e)
+        logger.warning("MySQL connection failed, Application not ready")
         return jsonify({"message": output}), 502
