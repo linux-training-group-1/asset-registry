@@ -51,7 +51,7 @@ If you want to start the mysql container only, use:<br>
 
 
 ## Build the docker image 
-To check if the docker image is wroking after changing the Dockerfile<br>
+To check if the docker image is working after changing the Dockerfile<br>
 Build the docker image<br>
 ```docker build -t asset-app .```<br>
 Start the docker image<br>
