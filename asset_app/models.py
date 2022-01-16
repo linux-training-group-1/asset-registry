@@ -10,6 +10,10 @@ def load_user(user_id):
 
 
 class Asset(db.Model):
+
+    # __bind_key__='one'
+    # __bind_key__='two'
+
     asset_id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     owner = db.Column(db.String(50), nullable=False)
@@ -22,6 +26,7 @@ class Asset(db.Model):
 
 
 class User(db.Model, UserMixin):
+
     user_id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(128), nullable=False)
     pwd = db.Column(db.String(128), nullable=False)
