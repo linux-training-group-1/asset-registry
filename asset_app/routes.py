@@ -1,8 +1,7 @@
 import logging
 import logging.config
 import os
-
-import psutil
+from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 from asset_app import app
 from flask import render_template, redirect, url_for, flash, request, jsonify
@@ -15,9 +14,23 @@ from asset_app import db
 from asset_app import redis_client
 import json
 from datetime import timedelta
+from dotenv import load_dotenv
 
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('app')
+
+load_dotenv()
+
+
+def when_ready(server):
+    GunicornPrometheusMetrics.start_http_server_when_ready(int(os.getenv('METRICS_PORT')))
+
+
+def child_exit(server, worker):
+    GunicornPrometheusMetrics.mark_process_dead_on_child_exit(worker.pid)
+
+
+metrics = GunicornPrometheusMetrics(app, group_by='endpoint')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -248,3 +261,6 @@ def ready():
         output = str(e)
         logger.warning("MySQL connection failed, Application not ready")
         return jsonify({"message": output}), 502
+
+
+metrics.register_endpoint('/metrics')

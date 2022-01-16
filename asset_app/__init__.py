@@ -26,5 +26,6 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "home_page"
-
+os.environ["PROMETHEUS_MULTIPROC_DIR"] = "/tmp"
+os.environ["prometheus_multiproc_dir"] = "/tmp"
 from asset_app import routes
