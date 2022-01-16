@@ -5,27 +5,15 @@ on:
     branches:
       - 'main'
 env:
-  PROJECT_ID: lt-2021-group-01
+  PROJECT_ID: linux-devops-3000
   GKE_CLUSTER: cluster-1    # Add your cluster name here.
   GKE_LOCATION: us-central1-c   # Add your cluster zone here.
   STAGING_DEPLOYMENT_NAME: staging # Add your deployment name here.
 
 jobs:
-  pre-ci:
-    name: Wait till the prevoius CI finishes.
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          abort-after-seconds: 600
   test:
     name: Unit and Integration Tests
     runs-on: ubuntu-20.04
-    needs:
-      - pre-ci
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -41,47 +29,58 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip3 install -r requirements-dev.txt
-      - name: Setup Chrome webdriver
-        uses: nanasess/setup-chromedriver@master
-      - name: Setup Chrome Display
-        run: |
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
-      - name: Install the MySQL client
-        run: sudo apt-get install mysql-client
+#      - name: Setup Chrome webdriver
+#        uses: nanasess/setup-chromedriver@master
+#      - name: Setup Chrome Display
+#        run: |
+#          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
+      #       - name: Install the MySQL client
+      #         run: sudo apt-get update & sudo apt-get upgrade & sudo apt-get -f install mysql-client -y
       - name: Create a .env file
         run: |
           cat << EOF > .env
-          MYSQL_HOST=localhost
-          MYSQL_USER=asset-app
+          MYSQL_HOST=mysql
+          MYSQL_USER=root
           MYSQL_PASSWORD=password
           MYSQL_DATABASE=asset_db
           MYSQL_PORT=3306
-          REDIS_HOST=localhost
+          REDIS_HOST=redis
           REDIS_PORT=6379
           REDIS_DB=0
           SECRET_KEY=bff4eb94deb028b293786461
           EOF
       - name: Docker compose up
         run: docker-compose up -d
-      - name: Wait for 15 seconds for the setup to start
-        run: sleep 15
+      - name: Wait for 45 seconds for the setup to start
+        run: sleep 45
       - name: Add mysql tables and data
         run: |
-          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/table.sql
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/table.sql || true
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < scripts/inserts.sql
       - name: Test with pytest
         run: |
-          pytest tests --verbose --failed-first
+          pip3 install -r requirements.txt
+          pytest tests/test_routes.py --verbose --failed-first
           ls -la
-        env:
-          DISPLAY: :99
+#        env:
+#          DISPLAY: :99
+      - name: Save docker compose logs to a file
+        if: failure()
+        run: |
+          echo "show databases;" | mysql -h localhost -P 3306 --protocol=tcp -u root --password=password
+          docker-compose logs --no-color >& logs.txt
+      - name: Print the container logs
+        if: failure()
+        run: cat logs.txt
       - name: Kill the docker compose
         run: docker-compose kill
+      - name: cancel workflow
+        if: failure()
+        uses: andymckay/cancel-action@0.2
 
   scan:
     name: Scan for image vulnerabilties
     runs-on: ubuntu-20.04
-    needs:
-      - pre-ci
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -91,6 +90,12 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build the docker image
         run: docker build . -t ${{ secrets.DOCKER_REGISTRY }}/asset-app
+      #      - name: Scan image
+      #        uses: anchore/scan-action@v3
+      #        with:
+      #          image: ${{ secrets.DOCKER_REGISTRY }}/asset-app
+      #          fail-build: true
+      #          severity-cutoff: critical
       - name: Container image scan
         uses: Azure/container-scan@v0.1
         with:
@@ -112,8 +117,6 @@ jobs:
   analyze:
     name: Code Quality Scanning
     runs-on: ubuntu-latest
-    needs:
-      - pre-ci
     permissions:
       actions: read
       contents: read
@@ -131,12 +134,23 @@ jobs:
           languages: ${{ matrix.language }}
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
-
+  pre-ci:
+    name: Wait till the prevoius CI finishes.
+    needs:
+      - scan
+      - test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Turnstyle
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          abort-after-seconds: 600
   test-staging:
     name: Test in staging env.
     needs:
-      - test
-      - scan
+      - pre-ci
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout the code
@@ -179,24 +193,40 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
-      - name: Install the MySQL client
-        run: sudo apt-get install mysql-client
+      #       - name: Install the MySQL client
+      #         run: sudo apt-get -f install mysql-client
       - name: Port forward mysql
         run: kubectl port-forward svc/mysql-service  3306:3306 &
       - name: Create tables and add data to mysql
         run: |
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/table.sql
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/table.sql 
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/inserts.sql
-          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql
-          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql
-      - name: Run the load test
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < table.sql || true
+          mysql -h localhost -P 3306 --protocol=tcp -u root --password=password < inserts.sql || true
+      - name: Setup Chrome webdriver
+        uses: nanasess/setup-chromedriver@master
+      - name: Setup Chrome Display
         run: |
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
-          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
-          pip install -r requirements.txt
-          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
-          cat $GITHUB_ENV
-          pytest test_main.py
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+      - name: Run E2E Test
+        run: |
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/tests/test_app.py
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/requirements-dev.txt
+          pip install -r requirements-dev.txt -q
+          STAGING_IP=`kubectl get ingress | awk 'FNR == 2 {print $4}'` pytest test_app.py --verbose --failed-first
+        env:
+          DISPLAY: :99
+          #          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+          #          cat $GITHUB_ENV
+          #          echo ${{ env.STAGING_IP }}
+#      - name: Run the load test
+#        run: |
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/test_main.py
+#          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/load_test/requirements.txt
+#          pip install -r requirements.txt -q
+#          echo "STAGING_IP=$(kubectl get ingress | awk 'FNR == 2 {print $4}')" >> $GITHUB_ENV
+#          cat $GITHUB_ENV
+##          STAGING_IP="${{ env.STAGING_IP }}" pytest test_main.py
 
 
   build-and-push:
@@ -226,8 +256,12 @@ jobs:
         run: pip install requests packaging
       - name: Get new Docker image tag
         run: COMMIT_MSG="${{ github.event.head_commit.message }}" python3 utils/docker_tag.py asset-app ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASS }}
+      - name: Split the version from the tag
+        run: |
+          wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/utils/extract_version.py
+          python extract_version.py ${{ env.DOCKER_IMAGE_TAG }}
       - name: Print env var
-        run: echo $DOCKER_IMAGE_TAG
+        run: cat $GITHUB_ENV
       - name: Build and push
         if: env.SHOULD_PUSH == 1
         id: docker_build
@@ -235,6 +269,12 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_TAG }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
+          body: Automated Release by GitHub Actions
       - name: Checkout the app config repo
         uses: actions/checkout@v2
         if: env.SHOULD_PUSH == 1
@@ -259,4 +299,17 @@ jobs:
           directory: './config'
           github_token: ${{ secrets.PERSONAL_COMMIT_TOKEN }}
           message: Updating the docker image tag via CI triggered by ${{ github.actor }}
-
+  notify:
+    name: Notify on Slack
+    needs: build-and-push
+    runs-on: ubuntu-20.04
+    if: always() # set always
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v2
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ env.WORKFLOW_CONCLUSION }} # neutral, success, skipped, cancelled, timed_out, action_required, failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: env.WORKFLOW_CONCLUSION == 'failure' # notify only if failure

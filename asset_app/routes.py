@@ -1,19 +1,16 @@
-import bcrypt
-from flask.helpers import flash
-from flask_wtf.form import FlaskForm
+import logging
+
 from asset_app import app
 from flask import render_template, redirect, url_for, flash, request, jsonify
-from asset_app.models import Asset, load_user
+from asset_app.models import Asset
 from asset_app.models import User
 from flask_login import login_user, logout_user, login_required, current_user
 
 from asset_app.forms import AddAssetForm, EditAssetForm, LoginForm, SearchAssetForm
 from asset_app import db
 from asset_app import redis_client
-import json 
+import json
 from datetime import timedelta
-
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -53,48 +50,44 @@ def dashboard():
 @login_required
 def search():
     form = SearchAssetForm()
-    
-    #set the expiration time on redis cache for entry
-    cache_expire_in_seconds=3600
+
+    # set the expiration time on redis cache for entry
+    cache_expire_in_seconds = 3600
 
     if form.validate_on_submit():
         search_query = form.search_query.data
 
         if form.search_type.data == 'id':
-            
             redis_result=redis_client.get(f':{search_query}')
-        
-       
             if redis_result:
                 print(f'redis hit(id): {search_query}')
                 print(f'search result from redis:{redis_result}')
-                search_result=json.loads(redis_result)
+                search_result = json.loads(redis_result)
 
             else:
                 print(f'redis miss(id): {search_query}')
                 search_result = Asset.query.filter(Asset.asset_id == search_query).all()
 
-                mysql_result_to_json=[]
+                mysql_result_to_json = []
                 for asset in search_result:
-                    item={
-                        'asset_id':asset.asset_id,
-                                'name':asset.name,
-                                'owner':asset.owner,
-                                'description':asset.description,
-                                'location':asset.location,
-                                'criticality':asset.criticality
+                    item = {
+                        'asset_id': asset.asset_id,
+                        'name': asset.name,
+                        'owner': asset.owner,
+                        'description': asset.description,
+                        'location': asset.location,
+                        'criticality': asset.criticality
                     }
-                    
-                    mysql_result_to_json.append(item)
-                
-                redis_client.set(f':{search_query}',json.dumps(mysql_result_to_json))
-                redis_client.expire(f':{search_query}',timedelta(seconds=cache_expire_in_seconds))
 
+                    mysql_result_to_json.append(item)
+
+                redis_client.set(f':{search_query}', json.dumps(mysql_result_to_json))
+                redis_client.expire(f':{search_query}', timedelta(seconds=cache_expire_in_seconds))
 
         if form.search_type.data == 'name':
-            
-            redis_result=redis_client.get(f'{search_query}:')
-     
+
+            redis_result = redis_client.get(f'{search_query}:')
+
             if redis_result:
                 search_result=json.loads(redis_result)
                 print(f'redis hit(name):{search_query}')
@@ -104,25 +97,25 @@ def search():
                 print(f'redis miss(name):{search_query}')
                 search = "%{}%".format(search_query)
                 search_result = Asset.query.filter(Asset.name.like(search)).all()
-                
-                mysql_result_to_json=[]
+
+                mysql_result_to_json = []
                 for asset in search_result:
-                    item={
-                        'asset_id':asset.asset_id,
-                                'name':asset.name,
-                                'owner':asset.owner,
-                                'description':asset.description,
-                                'location':asset.location,
-                                'criticality':asset.criticality
+                    item = {
+                        'asset_id': asset.asset_id,
+                        'name': asset.name,
+                        'owner': asset.owner,
+                        'description': asset.description,
+                        'location': asset.location,
+                        'criticality': asset.criticality
                     }
-                    
+
                     mysql_result_to_json.append(item)
-                
-                redis_client.set(f'{search_query}:',json.dumps(mysql_result_to_json))
-                redis_client.expire(f'{search_query}:',timedelta(seconds=cache_expire_in_seconds)) 
+
+                redis_client.set(f'{search_query}:', json.dumps(mysql_result_to_json))
+                redis_client.expire(f'{search_query}:', timedelta(seconds=cache_expire_in_seconds))
 
         if search_result:
-         
+
             return render_template('search.html', form=form, search_result=search_result)
 
         else:
@@ -198,7 +191,8 @@ def edit_asset():
             print('validation errors')
             flash(f'{err_msg}', category='error')
 
-    # if ((request.referrer == request.url_root+url_for("list_assets")[1:]) or (request.referrer == request.url_root+url_for("edit_asset")[1:])):
+    # if ((request.referrer == request.url_root+url_for("list_assets")[1:]) or (request.referrer ==
+    # request.url_root+url_for("edit_asset")[1:])):
 
     if asset:
         form.assetID.data = asset.asset_id
@@ -241,5 +235,3 @@ def ready():
     except Exception as e:
         output = str(e)
         return jsonify({"message": output}), 502
-
-
