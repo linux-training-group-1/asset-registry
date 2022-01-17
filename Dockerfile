@@ -1,8 +1,7 @@
 FROM python:3.10.1 as build-image
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install --reinstall build-essential --no-install-recommends -y
-#RUN apt-get install -y --no-install-recommends gcc
+RUN apt-get install build-essential --no-install-recommends -y
 
 ## virtualenv
 ENV VIRTUAL_ENV=/opt/venv
