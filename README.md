@@ -1,7 +1,8 @@
 # The CI/CD pipeline
 [![CI Pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml)
-![cicd-full](https://user-images.githubusercontent.com/32504465/148670595-9b51da6d-4ffa-4e2e-9aae-37377f90ac47.png)
+
+![cicd-full](https://user-images.githubusercontent.com/32504465/150727159-de133cf7-489e-4ae7-a938-abc9f1732400.png)
 
 
 
