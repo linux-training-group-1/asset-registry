@@ -3,7 +3,7 @@ html {
 }
 
 :root {
-    --backgroundColor: #ffffff;
+    --backgroundColor: #f9f9f9;
     --red-light: #f8d7da;
     --red-dark: #842029;
     --green-light: #d1e7dd;
@@ -592,6 +592,8 @@ span.close-btn {
         width: 30%;
         max-width: 12rem;
         background-color: hsl(222, 47%, 11%);
+/*         background-color: hsl(0, 0%, 0%); */
+        
         justify-content: flex-start;
         padding: 1rem 10px 3rem 10px;
         height: 100%;
