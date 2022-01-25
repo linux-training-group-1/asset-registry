@@ -196,7 +196,7 @@ jobs:
       #       - name: Install the MySQL client
       #         run: sudo apt-get -f install mysql-client
       - name: Port forward mysql
-        run: kubectl port-forward svc/staging-mysql-service  3306:3306 &
+        run: kubectl port-forward svc/mysql-service  3306:3306 &
       - name: Create tables and add data to mysql
         run: |
           wget https://raw.githubusercontent.com/linux-training-group-1/asset-registry/main/scripts/table.sql 
