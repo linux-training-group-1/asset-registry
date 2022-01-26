@@ -62,3 +62,10 @@ Build the docker image<br>
 ```docker build -t asset-app .```<br>
 Start the docker image<br>
 ```docker run --env-file=.env -itp 5000:5000 asset-app```<br>
+
+The final presentation<br>
+https://docs.google.com/presentation/d/1K4E41Gm-nl5o9gfC0TgtCNCr_J8cKpusqlOGqORnu1c/edit?usp=sharing
+<br>
+Final report:<br>
+https://docs.google.com/document/d/1bQaODhZRSY3XHysZhLApM2hHU1YCk5TDrCV-tauAlbw/edit?usp=sharing
+<br>
