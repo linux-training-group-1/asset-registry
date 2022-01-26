@@ -2,11 +2,16 @@
 [![CI Pipeline](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/linux-training-group-1/asset-registry/actions/workflows/codeql-analysis.yml)
 
-![cicd-full](https://user-images.githubusercontent.com/32504465/150727159-de133cf7-489e-4ae7-a938-abc9f1732400.png)
+![cicd-full](https://user-images.githubusercontent.com/32504465/151090833-ecf8d08c-fb2e-4598-996c-1f10ffb76765.png)
+
 
 
 
 # Asset Registry Application
+## High level architecture
+![finalarch](https://user-images.githubusercontent.com/32504465/151090728-cd94b352-93b2-4798-9dca-a8eb3e222917.png)
+
+
 ## Developer Guide
 Create a virtual environment and activate it.
 Install the dependencies:<br>
