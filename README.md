@@ -7,6 +7,10 @@
 
 
 # Asset Registry Application
+## High level architecture
+![finalarch](https://user-images.githubusercontent.com/32504465/151090728-cd94b352-93b2-4798-9dca-a8eb3e222917.png)
+
+
 ## Developer Guide
 Create a virtual environment and activate it.
 Install the dependencies:<br>
